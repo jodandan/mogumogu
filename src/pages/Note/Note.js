@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Backbutton } from '../../assets/Backbutton_icon.svg'
 import Pagination from '../../components/NotePagination/Pagination';

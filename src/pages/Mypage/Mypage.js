@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { ReactComponent as Backbutton } from '../../assets/Backbutton_icon.svg';
 
 import PostList from '../../components/MypagePagination/PostList'; 
-import postData from '../../components/MypagePagination/postData'; 
+import postData from '../../components/MypagePagination/MypagepostData'; 
 
 export default function Mypage() {
     return (
