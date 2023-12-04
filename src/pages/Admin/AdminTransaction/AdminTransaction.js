@@ -8,7 +8,7 @@ import Pagination from 'react-js-pagination';
 
 const itemsPerPage = 5;
 
-export default function AdminPost() {
+export default function AdminTransaction() {
     const [currentPage, setCurrentPage] = useState(1);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -44,8 +44,8 @@ export default function AdminPost() {
                     <Number>{post.number}</Number>
                     <PostTitle>{post.title}</PostTitle>
                     <PostSituation>{post.situation}</PostSituation>
-                        <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
-                        <Button onClick={() => handleCompletion(post.id)}>거래 완료</Button>
+                    <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
+                    <Button onClick={() => handleCompletion(post.id)}>거래 완료</Button>
                 </BoardItem>
             ))}
             {totalPages > 1 && (
