@@ -38,6 +38,7 @@ const HeaderBox = styled.div`
   width: 100%;
   height: 5rem; 
   border: 1px solid blue;
+
 `;
 
 const CategotyBox = styled.div`
@@ -52,7 +53,7 @@ const CategotyBox = styled.div`
 `;
 
 const Menu = styled.div`
-  width: 426px;
+  width: 410px;
   height: 88px;
   flex-shrink: 0;
   border-radius: 20px;
