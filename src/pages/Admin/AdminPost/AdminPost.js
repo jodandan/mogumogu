@@ -100,7 +100,7 @@ const BoardItem = styled.div`
 const Number = styled.div`
   color: #000;
   font-family: Noto Sans;
-  font-size: 24px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
