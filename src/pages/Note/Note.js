@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Backbutton } from '../../assets/Backbutton_icon.svg'
+import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Pagination from '../../components/NotePagination/Pagination';
 
 export default function Note() {
@@ -9,17 +9,16 @@ export default function Note() {
             <HeaderBox>
                 <div>헤더자리</div>
             </HeaderBox>
-            <div style={{padding: '2rem'}}>
+            <div style={{ padding: '2rem' }}>
                 <TitleBox>
                     <BackButton>
-                        <Backbutton />
+                        <BackbuttonIcon />
                     </BackButton>
                     <Title>쪽지함</Title>
                 </TitleBox>
                 <PostBody>
-                    <Pagination /> 
+                    <Pagination />
                 </PostBody>
-
             </div>
         </div>
     )
