@@ -1,5 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+
+
+import SignIn from "./pages/Login/SignIn/SignIn";
+import SignUp from "./pages/Login/SignUp/SignUp";
+import EmailAuth from "./pages/Login/EmailAuth/EmailAuth";
+
 import Note from './pages/Note/Note';
 import Mypage from './pages/Mypage/Mypage';
 
@@ -14,6 +20,13 @@ function App() {
   return (
     <div className="App">
       <Routes>
+
+
+        <Route path="/" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/emailauth" element={<EmailAuth />} />
+
+
         <Route path="/note" element={<Note />} />
         <Route path="/note/:noteId" element={<NoteDetailPage notesData={notesData} />} />
 
