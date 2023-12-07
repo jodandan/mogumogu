@@ -6,6 +6,9 @@ import SignIn from "./pages/Login/SignIn/SignIn";
 import SignUp from "./pages/Login/SignUp/SignUp";
 import EmailAuth from "./pages/Login/EmailAuth/EmailAuth";
 
+import Header from "./components/Header/Header";
+import MainPage from "./pages/MainPage/MainPage";
+
 import Note from './pages/Note/Note';
 import Mypage from './pages/Mypage/Mypage';
 
@@ -24,8 +27,8 @@ function App() {
 
         <Route path="/" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/emailauth" element={<EmailAuth />} />
-
+        <Route path="/emailauth" element={<EmailAuth />} />       
+        <Route path="/mainpage" element={<><Header/><MainPage /></>} />
 
         <Route path="/note" element={<Note />} />
         <Route path="/note/:noteId" element={<NoteDetailPage notesData={notesData} />} />
