@@ -8,6 +8,7 @@ import EmailAuth from "./pages/Login/EmailAuth/EmailAuth";
 
 import Header from "./components/Header/Header";
 import MainPage from "./pages/MainPage/MainPage";
+import MemberInfo from "./pages/MemberInfo/MemberInfo";
 
 import Note from './pages/Note/Note';
 import Mypage from './pages/Mypage/Mypage';
@@ -29,7 +30,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/emailauth" element={<EmailAuth />} />       
         <Route path="/mainpage" element={<><Header/><MainPage /></>} />
-
+        <Route path="/memberinfo" element={<><Header/><MemberInfo /></>} />
+       
         <Route path="/note" element={<Note />} />
         <Route path="/note/:noteId" element={<NoteDetailPage notesData={notesData} />} />
 
