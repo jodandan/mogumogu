@@ -9,7 +9,8 @@ import EmailAuth from "./pages/Login/EmailAuth/EmailAuth";
 
 import MainPage from "./pages/MainPage/MainPage";
 import MemberInfo from "./pages/MemberInfo/MemberInfo";
-import CreatePost from "./pages/CreatePost/CreatePost";
+import CreatePost from "./pages/Post/CreatePost/CreatePost";
+import PostDetail from "./pages/Post/PostDetail/PostDetail";
 
 import Note from './pages/Note/Note';
 import Mypage from './pages/Mypage/Mypage';
@@ -35,6 +36,7 @@ function App() {
         <Route path="/mainpage" element={<><Header/><MainPage /></>} />
         <Route path="/memberinfo" element={<><Header/><MemberInfo /></>} />
         <Route path="/createpost" element={<><Header/><CreatePost /></>} />
+        <Route path="/postdetail/:id" element={<><Header/><PostDetail /></>} />
 
 
         <Route path="/note" element={<Note />} />
