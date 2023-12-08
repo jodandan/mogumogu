@@ -1,20 +1,26 @@
 import React from 'react'
 import styled from 'styled-components';
-import { ReactComponent as Backbutton } from '../../assets/Backbutton_icon.svg';
+import { useNavigate } from 'react-router-dom';
+import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg';
 
-import PostList from '../../components/MypagePagination/PostList'; 
-import postData from '../../components/MypagePagination/MypagepostData'; 
+import PostList from '../../components/MypagePagination/PostList';
+import postData from '../../components/MypagePagination/MypagepostData';
+import Header from './../../components/Header/Header';
 
 export default function Mypage() {
+    const navigate = useNavigate();
+
+    const handleBackButtonClick = () => {
+        navigate('/mainpage');
+    };
+    
     return (
         <div>
-            <HeaderBox>
-                <div>헤더자리</div>
-            </HeaderBox>
+            <Header />
             <div style={{ padding: '3rem' }}>
                 <TitleBox>
                     <BackButton>
-                        <Backbutton />
+                        <BackbuttonIcon onClick={handleBackButtonClick} />
                     </BackButton>
                     <Title>마이페이지</Title>
                 </TitleBox>
@@ -33,11 +39,6 @@ export default function Mypage() {
     )
 }
 
-const HeaderBox = styled.div`
-    width: 100%;
-    height: 5rem; 
-    border: 1px solid blue;
-`;
 
 const TitleBox = styled.div`
     width: 100%;
@@ -50,6 +51,7 @@ const BackButton = styled.button`
     stroke: #555454;
     background-color: white;
     border: none;
+    cursor: pointer;
 `;
 
 const Title = styled.div`
