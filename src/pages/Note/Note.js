@@ -1,18 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Pagination from '../../components/NotePagination/Pagination';
+import Header from './../../components/Header/Header';
+
 
 export default function Note() {
+    const navigate = useNavigate();
+
+    const handleBackButtonClick = () => {
+        navigate('/mainpage');
+    };
+
     return (
         <div>
-            <HeaderBox>
-                <div>헤더자리</div>
-            </HeaderBox>
+            <Header />
             <div style={{ padding: '2rem' }}>
                 <TitleBox>
                     <BackButton>
-                        <BackbuttonIcon />
+                        <BackbuttonIcon onClick={handleBackButtonClick} />
                     </BackButton>
                     <Title>쪽지함</Title>
                 </TitleBox>
@@ -23,12 +30,6 @@ export default function Note() {
         </div>
     )
 }
-
-const HeaderBox = styled.div`
-    width: 100%;
-    height: 5rem; 
-    border: 1px solid blue;
-`;
 
 const TitleBox = styled.div`
     width: 100%;
@@ -41,6 +42,7 @@ const BackButton = styled.button`
     stroke: #555454;
     background-color: white;
     border: none;
+    cursor: pointer;
 `;
 
 const Title = styled.div`

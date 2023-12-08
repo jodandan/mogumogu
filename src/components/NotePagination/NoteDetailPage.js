@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Header from '../Header/Header';
+
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Plusbutton from '../../assets/Plusbutton.png'
 import checkmark from '../../assets/checkmark.png'
@@ -9,6 +11,7 @@ import dollar from '../../assets/dollar.png'
 import passbook from '../../assets/passbook.png'
 
 import InputComment from './InputComment';
+import TransactionPopup from './TransactionPopup';
 
 
 const NoteDetailPage = ({ notesData }) => {
@@ -46,9 +49,7 @@ const NoteDetailPage = ({ notesData }) => {
 
     return (
         <div>
-            <HeaderBox>
-                <div>헤더자리</div>
-            </HeaderBox>
+            <Header />
             <div style={{ padding: '2rem' }}>
                 <TitleBox>
                     <BackButton>
@@ -62,35 +63,7 @@ const NoteDetailPage = ({ notesData }) => {
                             style={{ width: '55px', height: '50px', cursor: 'pointer' }}
                             onClick={handlePlusButtonClick}
                         />
-                        {isPopupVisible && (
-                            <Popup>
-                                <div style={{ display: 'flex', flexDirection: 'row'}}>
-                                    <div style={{ display: 'flex', flexDirection: 'row', gap: '2rem' }}>
-                                        <PopupOption onClick={() => handlePopupOptionClick('입금 신청')}>
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <img src={dollar} alt='dollar' style={{ width: '64px', height: '64px', padding: '1rem' }} />
-                                                <p style={{ textAlign: 'center' }}>입금 신청</p>
-                                            </div>
-                                        </PopupOption>
-                                        <PopupOption onClick={() => handlePopupOptionClick('거래 완료')}>
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <img src={checkmark} alt='checkmark' style={{ width: '64px', height: '64px', padding: '1rem' }} />
-                                                <p style={{ textAlign: 'center' }}>거래 완료</p>
-                                            </div>
-                                        </PopupOption>
-                                        <PopupOption onClick={() => handlePopupOptionClick('계좌 확인')}>
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <img src={passbook} alt='passbook' style={{ width: '64px', height: '64px', padding: '1rem' }} />
-                                                <p style={{ textAlign: 'center' }}>계좌 확인</p>
-                                            </div>
-                                        </PopupOption>
-                                    </div>
-                                    <div style={{}}>
-                                        <P style={{margin: '4rem 0rem 0rem 45rem'}}>진행 현황 : 거래승인</P>
-                                    </div>
-                                </div>
-                            </Popup>
-                        )}
+                        {isPopupVisible && <TransactionPopup handlePopupOptionClick={handlePopupOptionClick} />}
                     </PlusButtonBox>
                 </TitleBox>
                 <PostBody>
@@ -118,11 +91,6 @@ const NoteDetailPage = ({ notesData }) => {
 
 export default NoteDetailPage;
 
-const HeaderBox = styled.div`
-    width: 100%;
-    height: 5rem; 
-    border: 1px solid blue;
-`;
 
 const TitleBox = styled.div`
     width: 100%;
@@ -165,41 +133,6 @@ const Comment = styled.div`
 const PlusButtonBox = styled.div`
     flex-shrink: 0;
     background-color: white;
-`;
-
-const Popup = styled.div`
-    position: absolute;
-    width: 1540px;
-    height: 172px;
-    flex-shrink: 0;
-    top: 80px;
-    right: 0px;
-    background-color: white;
-    border: 1px solid #ccc;
-    background: #F0F0F0;
-    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    z-index: 2;
-`;
-
-const PopupOption = styled.div`
-    padding: 10px;
-    cursor: pointer;
-    
-    &:hover {
-      background-color: #f5f5f5;
-  }
-`;
-
-const P = styled.div`
-    width: 286px;
-    height: 69px;
-    flex-shrink: 0;
-    color: #393939;
-    font-family: Inter;
-    font-size: 30px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
 `;
 
 
