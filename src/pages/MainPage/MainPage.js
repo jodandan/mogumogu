@@ -139,7 +139,7 @@ export default function MainPage() {
               <ListItem
                 alignItems="center"
                 onClick={() => {
-                  navigate(`/post/${encodeURIComponent(post.id)}`);
+                  navigate(`/postdetail/${encodeURIComponent(post.id)}`);
                 }}
               >
           <Grid container alignItems="center" spacing={2}>
