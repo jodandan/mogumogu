@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as Backbutton } from '../../assets/Backbutton_icon.svg'
+import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
+import Header from './../../components/Header/Header';
 
 export default function Admin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  
+  const handleBackButtonClick = () => {
+    navigate('/');
+};
 
   const handleIdChange = (e) => {
     setId(e.target.value);
@@ -16,16 +23,15 @@ export default function Admin() {
 
   const handleLogin = () => {
     console.log('ID:', id, 'PASSWORD:', password);
+    navigate('/adminpost');
   };
   return (
     <div>
-      <HeaderBox>
-        <div>헤더자리</div>
-      </HeaderBox>
+        <Header />
       <div style={{ padding: '2rem' }}>
         <div>
           <BackButton>
-            <Backbutton />
+            <BackbuttonIcon onClick={handleBackButtonClick} />
           </BackButton>
         </div>
         <Title>
@@ -40,25 +46,20 @@ export default function Admin() {
             <InputLabel>Password</InputLabel>
             <InputField type="password" value={password} placeholder="비밀번호를 입력해주세요" onChange={handlePasswordChange} />
           </div>
-          <div style={{ paddingTop: '2rem' }}>
+          <LoginButtonBox>
             <LoginButton onClick={handleLogin}>로그인</LoginButton>
-          </div>
+          </LoginButtonBox>
         </LoginBox>
       </div>
     </div>
   )
 }
 
-const HeaderBox = styled.div`
-    width: 100%;
-    height: 5rem; 
-    border: 1px solid blue;
-`;
-
 const BackButton = styled.button`
     stroke: #555454;
     background-color: white;
     border: none;
+    cursor: pointer;
 `;
 
 const Title = styled.div`
@@ -74,11 +75,12 @@ const Title = styled.div`
 //=================== 로그인 CSS =======================
 
 const LoginBox = styled.div`
-    width: 50%;
-    height: 50%; 
+    width: 50vw;
+    height: 50vh; 
     margin: 0 auto;
-    margin-top: 2rem;
-
+    margin-top: 50px;
+    display:flex;
+    flex-direction: column;
 `;
 
 const InputLabel = styled.label`
@@ -92,11 +94,10 @@ const InputLabel = styled.label`
 
 const InputField = styled.input`
     display: flex;
-    width: 30rem;
-    height: 44px;
+    width: 30vw;
+    height: 7vh;
     padding: 0px 20px;
     align-items: center;
-    gap: 31px;
     flex-shrink: 0;
     border-radius: 4px;
     border: 1px solid var(--gray-300, #A6A6A6); 
@@ -104,14 +105,24 @@ const InputField = styled.input`
 
 const LoginButton = styled.button`
     display: flex;
-    width: 30rem;
-    height: 54px;
+    width: 33vw;
+    height: 7vh;
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
     border-radius: 4px;
     background: #004E96;
     color: white;
-    margin: 0 auto;
     cursor: pointer;
 `;
+
+const LoginButtonBox = styled.div`
+    width: 33vw;
+    margin-top: 20px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 7rem;
+    
+`;
+
