@@ -1,12 +1,12 @@
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
-import React from 'react';
-import Container from '@mui/material/Container';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { Toolbar, Grid } from '@mui/material';
-import { useState } from 'react';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Guide from "../../assets/Guide.png"
@@ -57,43 +57,60 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: '50ch',
     },
   },
-}));  
+}));
 
 const defaultTheme = createTheme();
 
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
+  const [boardData, setBoardData] = useState([]);
   const navigate = useNavigate();
-   
+
+  useEffect(() => {
+    // API에서 데이터 가져오기
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        setBoardData(response.data);
+        console.log(response);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  
   //배너 스타일링
   const styles = {
     container: {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#EEF2F9',  
+      background: '#EEF2F9',
       padding: "2rem"
     },
     image: {
       maxWidth: '100%',
       height: "100%"
     },
-  }; 
+  };
 
 
   return (
     <ThemeProvider theme={defaultTheme}>
-     
-      <Toolbar sx={{ margin:'5rem 2rem 5rem 8rem', alignItems: 'center' }}>
+
+      <Toolbar sx={{ margin: '5rem 2rem 5rem 8rem', alignItems: 'center' }}>
         <Grid></Grid>
         <Grid container justifyContent="center">
-         {/* 검색창 */}
+          {/* 검색창 */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              style={{ color: '#898989', margin: 'auto' }} 
+              style={{ color: '#898989', margin: 'auto' }}
               placeholder="검색어를 입력하세요."
               inputProps={{ 'aria-label': 'search' }}
               value={searchTerm}
@@ -102,68 +119,68 @@ export default function MainPage() {
           </Search>
         </Grid>
         {/* 아이콘 */}
-        <PersonOutlineIcon  
-        sx={{ fontSize: '40px', color: '#6E6E6E', marginRight: "1rem" }}
-        onClick={()=>{navigate("/mypage")}}/>
-        <MailOutlineIcon  
-        sx={{ fontSize: '40px', color: '#6E6E6E' }} 
-        onClick={()=>{navigate("/note")}}/>
+        <PersonOutlineIcon
+          sx={{ fontSize: '40px', color: '#6E6E6E', marginRight: "1rem" }}
+          onClick={() => { navigate("/mypage") }} />
+        <MailOutlineIcon
+          sx={{ fontSize: '40px', color: '#6E6E6E' }}
+          onClick={() => { navigate("/note") }} />
       </Toolbar>
-       {/* 배너 */}
-          <Grid container style={styles.container}>
-          <img src={Guide} alt="" style={styles.image} />
+      {/* 배너 */}
+      <Grid container style={styles.container}>
+        <img src={Guide} alt="" style={styles.image} />
+      </Grid>
+
+      {/* 게시글 헤더 */}
+      <Grid container direction="column" justifyContent="space-around" alignItems="center">
+        <Grid container style={{ fontSize: '25px', padding: '3rem 1rem 2rem 1rem', fontWeight: 'bold', color: '#414141' }}>
+          <Grid item xs={4} />
+          <Grid item xs={4} style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            글 목록
+          </Grid>
+          <Grid item xs={4} style={{ textAlign: 'center' }}>
+            <Chip
+              style={{ fontSize: "20px", width: "10rem", height: "3rem" }}
+              icon={<DriveFileRenameOutlineTwoToneIcon fontSize='large' />}
+              label="글쓰기"
+              onClick={() => { navigate("/createpost") }}
+            />
+          </Grid>
         </Grid>
 
-    {/* 게시글 헤더 */}
-      <Grid container direction="column" justifyContent="space-around" alignItems="center">
-        <Grid container style={{ fontSize:'25px', padding: '3rem 1rem 2rem 1rem', fontWeight: 'bold', color: '#414141' }}>
-      <Grid item xs={4} />
-      <Grid item xs={4} style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        글 목록
-      </Grid>
-      <Grid item xs={4} style={{ textAlign: 'center'}}>
-        <Chip
-          style={{ fontSize: "20px", width: "10rem", height: "3rem"}}
-          icon={<DriveFileRenameOutlineTwoToneIcon fontSize='large'/>}
-          label="글쓰기"
-          onClick={()=>{navigate("/createpost")}}
-        />
-      </Grid>
+        {/* 게시글 목록 */}
+        <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
+          {BoardData.map((post) => (
+            <React.Fragment key={post.id}>
+              <Grid container justifyContent="space-between" alignItems="center">
+                <ListItem
+                  alignItems="center"
+                  onClick={() => {
+                    navigate(`/postdetail/${encodeURIComponent(post.id)}`);
+                  }}
+                >
+                  <Grid container alignItems="center" spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                      <div>
+                        <div style={{ margin: '20px' }}>
+                          <ListItemText
+                            primary={
+                              <Typography variant="h5" style={{ fontSize: '1.5rem', textAlign: 'left' }}>
+                                {post.title}
+                              </Typography>
+                            }
+                          />
+                        </div>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              </Grid>
+            </React.Fragment>
+          ))}
+        </List>
       </Grid>
 
-       {/* 게시글 목록 */}
-        <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
-        {BoardData.map((post) => (
-          <React.Fragment key={post.id}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <ListItem
-                alignItems="center"
-                onClick={() => {
-                  navigate(`/postdetail/${encodeURIComponent(post.id)}`);
-                }}
-              >
-          <Grid container alignItems="center" spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <div>
-                <div style={{ margin: '20px' }}>
-                  <ListItemText
-                    primary={
-                      <Typography variant="h5" style={{ fontSize: '1.5rem', textAlign: 'left' }}>
-                        {post.title}
-                      </Typography>
-                    }
-                  />
-                </div>
-              </div>
-            </Grid>
-          </Grid>
-        </ListItem>
-      </Grid>
-        </React.Fragment>
-      ))}
-      </List>
-            </Grid>
-            
     </ThemeProvider>
   );
 }
