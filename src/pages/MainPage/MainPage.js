@@ -1,12 +1,9 @@
-
-import React from 'react';
-import Container from '@mui/material/Container';
+import React, { useState, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { Toolbar, Grid } from '@mui/material';
-import { useState } from 'react';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Guide from "../../assets/Guide.png"
@@ -18,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone';
 import Chip from '@mui/material/Chip';
 import BoardData from "../../components/Board/BoardData"
+import axios from 'axios';
 
 
 //검색창 스타일링
@@ -63,8 +61,42 @@ const defaultTheme = createTheme();
 
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
+  const [posts, setPosts] = useState([]); // 게시글 상태
+
   const navigate = useNavigate();
    
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        setPosts(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    
+    fetchPosts();
+  }, []);
+  
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get(`http://dana-seo.shop/api/article/search?keyword=${searchTerm}`);
+        setPosts(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    if (searchTerm) { // searchTerm이 있을 때만 API를 호출합니다.
+      fetchPosts();
+    } else {
+      setPosts([]); // searchTerm이 없을 때는 posts를 초기화합니다.
+    }
+  }, [searchTerm]);
+
   //배너 스타일링
   const styles = {
     container: {
@@ -132,16 +164,16 @@ export default function MainPage() {
       </Grid>
 
        {/* 게시글 목록 */}
-        <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
-        {BoardData.map((post) => (
-          <React.Fragment key={post.id}>
-            <Grid container justifyContent="space-between" alignItems="center">
-              <ListItem
-                alignItems="center"
-                onClick={() => {
-                  navigate(`/postdetail/${encodeURIComponent(post.id)}`);
-                }}
-              >
+       <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
+  {posts.map((post) => (
+    <React.Fragment key={post.id}>
+      <Grid container justifyContent="space-between" alignItems="center">
+        <ListItem
+          alignItems="center"
+          onClick={() => {
+            navigate(`/postdetail/${encodeURIComponent(post.id)}`);
+          }}
+        >
           <Grid container alignItems="center" spacing={2}>
             <Grid item xs={12} sm={6}>
               <div>
@@ -159,9 +191,9 @@ export default function MainPage() {
           </Grid>
         </ListItem>
       </Grid>
-        </React.Fragment>
-      ))}
-      </List>
+    </React.Fragment>
+  ))}
+</List>
             </Grid>
             
     </ThemeProvider>
