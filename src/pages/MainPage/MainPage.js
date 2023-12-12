@@ -80,22 +80,23 @@ export default function MainPage() {
   }, []);
   
 
-  useEffect(() => {
-    const fetchPosts = async () => {
+  const handleEnterPress = async (event) => {
+    // 엔터 키가 눌렸을 때
+    if (event.key === 'Enter') {
       try {
-        const response = await axios.get(`http://dana-seo.shop/api/article/search?keyword=${searchTerm}`);
+        let response;
+        // 검색어가 있는 경우와 없는 경우를 분리하여 처리
+        if (searchTerm) {
+          response = await axios.get(`http://dana-seo.shop/api/article/search?keyword=${searchTerm}`);
+        } else {
+          response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        }
         setPosts(response.data);
       } catch (error) {
         console.error(error);
       }
-    };
-  
-    if (searchTerm) { // searchTerm이 있을 때만 API를 호출합니다.
-      fetchPosts();
-    } else {
-      setPosts([]); // searchTerm이 없을 때는 posts를 초기화합니다.
     }
-  }, [searchTerm]);
+  };
 
   //배너 스타일링
   const styles = {
@@ -130,6 +131,7 @@ export default function MainPage() {
               inputProps={{ 'aria-label': 'search' }}
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
+              onKeyPress={handleEnterPress}
             />
           </Search>
         </Grid>
