@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone';
 import Chip from '@mui/material/Chip';
-import BoardData from "../../components/Board/BoardData"
 import axios from 'axios';
 
 

@@ -1,18 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {  Grid, Typography, Container, Button, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { ReactComponent as BackbuttonIcon } from "../../../assets/Backbutton_icon.svg"
 import PersonIcon from '@mui/icons-material/Person';
 import BoxImg from "../../../assets/BoxImg.png"
+import { useParams } from "react-router-dom";
+import axios from 'axios';
 
 export default function PostDetail() {
+  const [detail, setDetail] = useState('')
+  
+  
+  let { postId } = useParams();
   const navigate = useNavigate();
  
   const handleBackButtonClick = () => {
     navigate('/mainpage');
 };
 
+useEffect(() => {
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get('http://dana-seo.shop/api/article/get',
+      { params:{
+        articleId: postId,
+      }});
+      console.log(response.data);
+      setDetail(response.data);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
   
+  fetchPosts();
+}, [postId]);
   return (
     <>
      <div style={{ padding: '3rem' }}>
@@ -30,12 +52,12 @@ export default function PostDetail() {
   <Grid item>
     
     <Typography variant="body1" style={{ marginLeft: '15px', fontSize: '30px', color: '#4F4E4E', fontWeight: 'bold' }}>
-      모구모구
+      {detail.nickName}
     </Typography>
     </Grid>
     <Grid item>
     <Typography variant="body5" style={{ marginLeft: '4rem', fontSize: '20px', color: '#7C7C7C' }}>
-      모집인원 3
+      모집인원 {detail.numberOfPeople}
     </Typography>
    
       </Grid>
@@ -51,10 +73,10 @@ export default function PostDetail() {
         
           <Grid item>
             <Typography variant="body1" style={{ marginLeft: '15px', fontSize: '30px', color: '#4F4E4E', fontWeight: 'bold'}}  align="left">
-             휴지 30롤 같이 구매해요!
+             {detail.title}
             </Typography>
             <Typography style={{ marginLeft: '15px', fontSize: '30px', color: '#4F4E4E' }}  align="left">
-             10롤씩 나눠 구매하실 분들 연락주세요
+            {detail.content}
             </Typography>
           </Grid>
         </Grid>
@@ -66,10 +88,10 @@ export default function PostDetail() {
   </Grid>
   <Grid item>
     <Typography variant="body1" style={{ fontWeight:"bold", marginLeft: '15px', fontSize: '22px', color: '#4F4E4E' }}>
-      쌍용씨앤비 CODI 순수한 데코 3겹 30cm 30롤
+    {detail.productName}
     </Typography>
     <Typography style={{ marginLeft: '15px', textAlign: 'left', fontSize: '20px', color: '#757474' }}>
-     6600원
+    인당 {detail.price / detail.numberOfPeople} 원
     </Typography> 
   </Grid>
 </Grid>
@@ -84,7 +106,7 @@ export default function PostDetail() {
         width: '200px',
         height: '60px',
       }}
-    >공동구매 참여하기</Button>
+    >쪽지 보내기</Button>
   </Grid>
 </Grid>
       </Container>
