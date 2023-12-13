@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState} from 'react';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -14,6 +14,9 @@ import axios from 'axios';
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+
+  const [errorMessage, setErrorMessage] = useState("");
+
 
   const handleSubmit = async (event) => { 
     event.preventDefault();
@@ -41,7 +44,10 @@ export default function SignIn() {
 
        navigate("/mainpage")
     } catch (error) {
-      console.error(error); // 에러 처리
+      if (error.response && error.response.status === 401) {
+        setErrorMessage("아이디 또는 비밀번호를 다시 확인해주세요.");
+      }
+      console.error(error); // 에러 출력
     }
   };
 
@@ -102,6 +108,13 @@ export default function SignIn() {
                 id="password"
                 autoComplete="current-password"
               />
+              {errorMessage && (
+            <Box marginTop="1rem" display="flex" justifyContent="center" marginBottom="1rem">
+              <Typography color="error" align="center">
+                {errorMessage}
+              </Typography>
+            </Box>
+          )}
              <Grid marginTop="2rem">
               <Button
                 type="submit"
