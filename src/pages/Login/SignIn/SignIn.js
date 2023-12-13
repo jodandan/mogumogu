@@ -17,7 +17,32 @@ export default function SignIn() {
 
   const handleSubmit = async (event) => { 
     event.preventDefault();
-    
+    const data = new FormData(event.currentTarget);
+
+
+    const username = data.get('email');
+    const password = data.get('password');
+
+    // API 요청
+    try {
+      const response = await axios.post('http://dana-seo.shop/api/user/login', {
+        username: username,
+        password: password
+        
+      });
+      console.log({username, password});
+      console.log(response.data); // 응답 확인
+
+      localStorage.setItem('userId', response.data.userId);
+      localStorage.setItem('token', response.data.token);
+      console.log(localStorage.getItem('userId')); // 로컬 스토리지에 저장된 userId 출력
+      console.log(localStorage.getItem('token')); // 로컬 스토리지에 저장된 token 출력
+      
+
+       navigate("/mainpage")
+    } catch (error) {
+      console.error(error); // 에러 처리
+    }
   };
 
   const navigate = useNavigate();
