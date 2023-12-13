@@ -1,7 +1,4 @@
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-
-
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
@@ -17,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import DriveFileRenameOutlineTwoToneIcon from '@mui/icons-material/DriveFileRenameOutlineTwoTone';
 import Chip from '@mui/material/Chip';
-import BoardData from "../../components/Board/BoardData"
+import axios from 'axios';
 
 
 //검색창 스타일링
@@ -63,25 +60,43 @@ const defaultTheme = createTheme();
 
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState(''); // 검색어 상태
-  const [boardData, setBoardData] = useState([]);
+  const [posts, setPosts] = useState([]); // 게시글 상태
+
   const navigate = useNavigate();
+   
 
   useEffect(() => {
-    // API에서 데이터 가져오기
-    const fetchData = async () => {
+    const fetchPosts = async () => {
       try {
         const response = await axios.get('http://dana-seo.shop/api/article/getAll');
-        setBoardData(response.data);
-        console.log(response);
+        setPosts(response.data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error(error);
       }
     };
-
-    fetchData();
+    
+    fetchPosts();
   }, []);
-
   
+
+  const handleEnterPress = async (event) => {
+    // 엔터 키가 눌렸을 때
+    if (event.key === 'Enter') {
+      try {
+        let response;
+        // 검색어가 있는 경우와 없는 경우를 분리하여 처리
+        if (searchTerm) {
+          response = await axios.get(`http://dana-seo.shop/api/article/search?keyword=${searchTerm}`);
+        } else {
+          response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        }
+        setPosts(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   //배너 스타일링
   const styles = {
     container: {
@@ -115,6 +130,7 @@ export default function MainPage() {
               inputProps={{ 'aria-label': 'search' }}
               value={searchTerm}
               onChange={(event) => setSearchTerm(event.target.value)}
+              onKeyPress={handleEnterPress}
             />
           </Search>
         </Grid>
@@ -147,40 +163,41 @@ export default function MainPage() {
             />
           </Grid>
         </Grid>
-
-        {/* 게시글 목록 */}
-        <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
-          {BoardData.map((post) => (
-            <React.Fragment key={post.id}>
-              <Grid container justifyContent="space-between" alignItems="center">
-                <ListItem
-                  alignItems="center"
-                  onClick={() => {
-                    navigate(`/postdetail/${encodeURIComponent(post.id)}`);
-                  }}
-                >
-                  <Grid container alignItems="center" spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                      <div>
-                        <div style={{ margin: '20px' }}>
-                          <ListItemText
-                            primary={
-                              <Typography variant="h5" style={{ fontSize: '1.5rem', textAlign: 'left' }}>
-                                {post.title}
-                              </Typography>
-                            }
-                          />
-                        </div>
-                      </div>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-              </Grid>
-            </React.Fragment>
-          ))}
-        </List>
       </Grid>
 
+       {/* 게시글 목록 */}
+       <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
+  {posts.map((post) => (
+    <React.Fragment key={post.id}>
+      <Grid container justifyContent="space-between" alignItems="center">
+        <ListItem
+          alignItems="center"
+          onClick={() => {
+            navigate(`/postdetail/${encodeURIComponent(post.id)}`);
+          }}
+        >
+          <Grid container alignItems="center" spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <div>
+                <div style={{ margin: '20px' }}>
+                  <ListItemText
+                    primary={
+                      <Typography variant="h5" style={{ fontSize: '1.5rem', textAlign: 'left' }}>
+                        {post.title}
+                      </Typography>
+                    }
+                  />
+                </div>
+              </div>
+            </Grid>
+          </Grid>
+        </ListItem>
+      </Grid>
+    </React.Fragment>
+  ))}
+</List>
+        
+            
     </ThemeProvider>
   );
 }

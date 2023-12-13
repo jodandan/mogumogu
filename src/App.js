@@ -36,7 +36,7 @@ function App() {
         <Route path="/mainpage" element={<><Header/><MainPage /></>} />
         <Route path="/memberinfo" element={<><Header/><MemberInfo /></>} />
         <Route path="/createpost" element={<><Header/><CreatePost /></>} />
-        <Route path="/postdetail/:id" element={<><Header/><PostDetail /></>} />
+        <Route path="/postdetail/:postId" element={<><Header/><PostDetail component={PostDetail} /></>} />
 
 
         <Route path="/note" element={<Note />} />

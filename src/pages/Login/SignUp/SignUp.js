@@ -8,29 +8,48 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import modangBack from "../../../assets/modangBack.png"
 import { ReactComponent as BackbuttonIcon } from "../../../assets/Backbutton_icon.svg"
-
+import axios from "axios"
 
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [email, setEmail] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [password, setPassword] = useState('');
+
 
   const navigate = useNavigate();
   
-  const handleSignUp = () => {
-    navigate('/emailauth');
+  const handleSignUp = (event) => {
+    event.preventDefault();
+    const data = {
+      username: email,
+      password: password,
+      nickName: nickname
+    };
+    
+    const userEmail = email; 
+
+
+   localStorage.setItem('userEmail', userEmail);
+
+    console.log(data);
+  
+    axios.post('http://dana-seo.shop/api/join/process', data)
+      .then(response => {
+        console.log(response.data);
+        navigate('/emailauth'); // API 요청 성공시 라우팅
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
+  
  
   const handleBackButtonClick = () => {
     navigate('/');
@@ -57,7 +76,7 @@ export default function SignUp() {
           <Typography component="h1"  variant="h4" style={{ fontWeight: 'bold' }}>
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form" noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}>
             <Grid container marginTop="1.5rem" spacing={2}>
             <Grid item xs={12}>
                 이메일
@@ -69,6 +88,8 @@ export default function SignUp() {
                   name="email"
                   autoComplete="email"
                   helperText="가천대 이메일을 통해 회원가입해주세요."
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12} >
@@ -80,6 +101,8 @@ export default function SignUp() {
                   label="닉네임을 입력해주세요."
                   name="nickname"
                   autoComplete="nickname" 
+                  value={nickname}
+                  onChange={(e) => setNickname(e.target.value)}
                 />
               </Grid>
              
@@ -94,6 +117,8 @@ export default function SignUp() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
