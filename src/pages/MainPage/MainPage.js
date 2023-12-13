@@ -166,6 +166,7 @@ export default function MainPage() {
       </Grid>
 
        {/* 게시글 목록 */}
+       <Grid container justifyContent="center">
        <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
   {posts.map((post) => (
     <React.Fragment key={post.id}>
@@ -196,6 +197,7 @@ export default function MainPage() {
     </React.Fragment>
   ))}
 </List>
+</Grid>
         
             
     </ThemeProvider>

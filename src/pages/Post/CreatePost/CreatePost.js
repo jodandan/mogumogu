@@ -23,7 +23,7 @@ export default function CreatePost() {
       [e.target.name]: e.target.value,
     });
   };
-
+  // 게시글 작성 api
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userId = localStorage.getItem('userId');
