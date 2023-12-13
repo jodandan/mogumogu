@@ -26,8 +26,8 @@ jobs:
           username: ubuntu
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
-        script: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker pull joowojr/react:latest
-          docker run -p 3000:3000 --name react joowojr/react:latest
-          docker image prune -af
+          script: |
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull joowojr/react:latest
+            docker run -p 3000:3000 --name react joowojr/react:latest
+            docker image prune -af
