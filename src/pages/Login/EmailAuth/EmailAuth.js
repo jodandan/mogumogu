@@ -22,7 +22,7 @@ export default function EmailAuth() {
   const handleSubmit = (event) => {
     event.preventDefault();
    
-    const email = localStorage.getItem('userId'); 
+    const email = localStorage.getItem('userEmail'); 
    
     
     axios.get('http://dana-seo.shop/api/join/emails/verifications', {
@@ -33,6 +33,11 @@ export default function EmailAuth() {
     })
     .then(response => {
       console.log(response.data);
+      // 정규표현식을 사용하여 문자열에서 userId 추출
+      const userId = response.data.match(/userId\s:\s(\d+)/)[1];
+      
+      // 추출한 userId를 로컬 스토리지에 저장
+      localStorage.setItem('userId', userId);
       navigate('/mainpage');
     })
     .catch(error => {

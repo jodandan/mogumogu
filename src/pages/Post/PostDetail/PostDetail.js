@@ -91,7 +91,7 @@ useEffect(() => {
     {detail.productName}
     </Typography>
     <Typography style={{ marginLeft: '15px', textAlign: 'left', fontSize: '20px', color: '#757474' }}>
-    인당 {detail.price / detail.numberOfPeople} 원
+    인당 {detail.cost / detail.numberOfPeople} 원
     </Typography> 
   </Grid>
 </Grid>

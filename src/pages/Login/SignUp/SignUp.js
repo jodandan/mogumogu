@@ -33,10 +33,10 @@ export default function SignUp() {
       nickName: nickname
     };
     
-    const userId = email; 
+    const userEmail = email; 
 
 
-   localStorage.setItem('userId', userId);
+   localStorage.setItem('userEmail', userEmail);
 
     console.log(data);
   
