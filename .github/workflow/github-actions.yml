@@ -1,14 +1,15 @@
 name: mogumogu front 'action' CI/CD
 on:
   push:
-    branches : [actions]
+    branches:
+      - actions
 #  pull_request:
 #    types: [closed]
 #    workflow_dispatch:
 permissions:
   contents: read
 jobs:
-  eureka:
+  build:
     runs-on: ubuntu-latest
 #    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
     steps:
