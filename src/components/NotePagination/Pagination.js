@@ -5,7 +5,7 @@ import NoteListItem from './NoteListItem';
 import NoteDetailPage from './NoteDetailPage';
 import notesData from './data'; // snowflake import
 
-const itemsPerPage = 10;
+const itemsPerPage = 5;
 
 const Paging = () => {
   const [page, setPage] = useState(1);
@@ -27,7 +27,7 @@ const Paging = () => {
 
   return (
     <div>
-      <ul>
+      <ul style={{marginBottom: '10px'}}>
         {currentData.map((note) => (
           <NoteListItem key={note.id} note={note} onClick={() => handleNoteClick(note)} />
         ))}
@@ -51,3 +51,4 @@ const Paging = () => {
 };
 
 export default Paging;
+

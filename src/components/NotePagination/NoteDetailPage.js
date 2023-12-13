@@ -81,8 +81,8 @@ const NoteDetailPage = ({ notesData }) => {
                                 <ListItemButton>
                                     <ListItemIcon>
                                         {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                        {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }}/>}
-                                        {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }}/>}
+                                        {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+                                        {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItemButton>
@@ -99,7 +99,13 @@ const NoteDetailPage = ({ notesData }) => {
                             <Comment key={comment.id}>
                                 <div style={{ width: '100%' }}>
                                     <div>
-                                        <p>{comment.sender}</p>
+                                        <p style={{
+                                            fontSize: '20px',
+                                            fontStyle: 'normal',
+                                            fontWeight: '700',
+                                            lineHeight: 'normal',
+                                            color: '#EDB96A'
+                                        }}>{comment.sender}</p>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                         <p>{comment.content}</p>
@@ -171,8 +177,8 @@ const Text = styled.div`
     line-height: normal;
     height: 20px;
     flex-shrink: 0;
-    padding: 5px 46px 20px 46px;
-    width: 20vw;
+    padding: 30px 46px 50px 46px;
+    width: 50vw;
 `;
 
 

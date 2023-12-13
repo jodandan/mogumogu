@@ -1,63 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import styled from 'styled-components';
 
 import Category from '../../../components/AdminCategory/Category';
-import postsData from './postsData';
 import Pagination from 'react-js-pagination';
 
 
 const itemsPerPage = 5;
 
 export default function AdminPost() {
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [posts, setPosts] = useState([]); // 게시글 상태
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentPosts = postsData.slice(startIndex, endIndex);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPosts = posts.slice(startIndex, endIndex);
 
-    const totalPages = Math.ceil(postsData.length / itemsPerPage);
+  const totalPages = Math.ceil(posts.length / itemsPerPage);
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleDelete = async (postId) => {
+    try {
+      await axios.delete(`http://dana-seo.shop/api/article/delete?articleId=${postId}`);
+
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+
+      console.log(`Post with id ${postId} deleted successfully.`);
+    } catch (error) {
+      console.error(`Error deleting post with id ${postId}:`, error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        setPosts(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
 
-    const handleDelete = (postId) => {
-        console.log(`Deleting post with id ${postId}`);
-    };
-    
-    return (
-        <div>
-            <Category />
-            <TitleBox>
-                <BoardTitle>번호</BoardTitle>
-                <Nickname>닉네임</Nickname>
-                <Recruit>모집 인원</Recruit>
-                <Title>제목</Title>
-                <Detail>내용</Detail>
-            </TitleBox>
-            {currentPosts.map((post) => (
-                <BoardItem key={post.id}>
-                    <Number>{post.number}</Number>
-                    <PostNickname>{post.nickname}</PostNickname>
-                    <PostRecruit>{post.recruit}</PostRecruit>
-                    <PostTitle>{post.title}</PostTitle>
-                    <PostDetail>{post.detail}</PostDetail>
-                    <DeleteButton onClick={() => handleDelete(post.id)}>삭제</DeleteButton>
-                </BoardItem>
-            ))}
-            {totalPages > 1 && (
-                <PaginationContainer>
-                    <Pagination
-                        activePage={currentPage}
-                        itemsCountPerPage={itemsPerPage}
-                        totalItemsCount={postsData.length}
-                        pageRangeDisplayed={5}
-                        onChange={handlePageChange}
-                    />
-                </PaginationContainer>
-            )}
-        </div>
-    );
+    fetchPosts();
+  }, []);
+
+
+  return (
+    <div>
+      <Category />
+      <TitleBox>
+        <BoardTitle>번호</BoardTitle>
+        <Nickname>닉네임</Nickname>
+        <Recruit>모집 인원</Recruit>
+        <Title>제목</Title>
+        <Detail>내용</Detail>
+      </TitleBox>
+      {currentPosts.map((post) => (
+        <BoardItem key={post.id}>
+          <Number>{post.id}</Number>
+          <PostNickname>{post.nickName}</PostNickname>
+          <PostRecruit>{post.numberOfPeople}</PostRecruit>
+          <PostTitle>{post.title}</PostTitle>
+          <PostDetail>{post.content}</PostDetail>
+          <DeleteButton onClick={() => handleDelete(post.id)}>삭제</DeleteButton>
+        </BoardItem>
+      ))}
+      {totalPages > 1 && (
+        <PaginationContainer>
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={itemsPerPage}
+            totalItemsCount={posts.length}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+          />
+        </PaginationContainer>
+      )}
+    </div>
+  );
 }
 
 const TitleBox = styled.div`
