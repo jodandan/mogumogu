@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import {  Grid, Typography, Container, Button, ButtonGroup } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { ReactComponent as BackbuttonIcon } from "../../../assets/Backbutton_icon.svg"
@@ -12,11 +13,22 @@ export default function PostDetail() {
   
   
   let { postId } = useParams();
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const handleButtonClick = () => {
+    setPopupVisible(true);
+  };
+
+  const handleSendMessageClick = () => {
+    setPopupVisible(false);
+  };
+
   const navigate = useNavigate();
- 
+
   const handleBackButtonClick = () => {
     navigate('/mainpage');
-};
+  };
+
 
 useEffect(() => {
   const fetchPosts = async () => {
@@ -37,11 +49,11 @@ useEffect(() => {
 }, [postId]);
   return (
     <>
-     <div style={{ padding: '3rem' }}>
-      <BackbuttonIcon onClick={handleBackButtonClick} />
-      </div>    
-       
-          <Grid container padding='1rem' >
+      <div style={{ padding: '3rem' }}>
+        <BackbuttonIcon onClick={handleBackButtonClick} />
+      </div>
+
+      <Grid container padding='1rem' >
         <Container maxWidth="xl">
           
         {/* 게시글 */}
@@ -96,28 +108,92 @@ useEffect(() => {
   </Grid>
 </Grid>
         </Grid>
-        <Grid container justifyContent="center" marginTop="7rem">
-  <Grid item>
-    
-  <Button
-      variant="contained"
-      sx={{
-        fontSize: '18px',
-        width: '200px',
-        height: '60px',
-      }}
-    >쪽지 보내기</Button>
-  </Grid>
-</Grid>
+         <Grid container justifyContent="center" marginTop="7rem">
+            <Grid item>
+
+              <Button
+                variant="contained"
+                sx={{
+                  fontSize: '18px',
+                  width: '200px',
+                  height: '60px',
+                }}
+                onClick={handleButtonClick}
+              >공동구매 참여하기
+              </Button>
+              {isPopupVisible && (
+                <Popup>
+                  <PopupContent>
+                    <Title>쪽지 보내기</Title>
+                    <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>
+                      <p>내용</p>
+                      <NoteInput placeholder="Type your message here" style={{ width: '34vw' }}></NoteInput>
+                    </div>
+                    <SendButton onClick={handleSendMessageClick}>확인</SendButton>
+                  </PopupContent>
+                </Popup>
+              )}
+            </Grid>
+          </Grid>
       </Container>
     
   </Grid>
      
 
 
-
-
-
+         
     </>
   );
 }
+
+const Popup = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw; 
+  max-width: 600px;
+  z-index: 2;
+`;
+
+const PopupContent = styled.div`
+  background: white;
+  padding: 1vw; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  input {
+    width: 100vw; 
+    height: 12vw; 
+    border: none;
+    border-radius: 5px;
+    padding: 0.5vw; 
+    margin-bottom: 1vw; 
+    border: 1px solid #ccc;
+  }
+`;
+
+const Title = styled.div`
+  width: 100vw; 
+  flex-shrink: 0;
+  color: var(--black, #000);
+  font-family: HeadlandOne;
+  font-size: 2.4vw; 
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding: 1vw; 
+`;
+
+const NoteInput = styled.input`
+    width: 10vw; 
+`;
+
+const SendButton = styled.button`
+  width: 37vw; 
+  height: 54px;
+  border-radius: 4px;
+  background: var(--gray-100, #e1e1e1);
+`;

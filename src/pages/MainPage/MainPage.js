@@ -54,7 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
       width: '50ch',
     },
   },
-}));  
+}));
 
 const defaultTheme = createTheme();
 
@@ -103,29 +103,29 @@ export default function MainPage() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#EEF2F9',  
+      background: '#EEF2F9',
       padding: "2rem"
     },
     image: {
       maxWidth: '100%',
       height: "100%"
     },
-  }; 
+  };
 
 
   return (
     <ThemeProvider theme={defaultTheme}>
-     
-      <Toolbar sx={{ margin:'5rem 2rem 5rem 8rem', alignItems: 'center' }}>
+
+      <Toolbar sx={{ margin: '5rem 2rem 5rem 8rem', alignItems: 'center' }}>
         <Grid></Grid>
         <Grid container justifyContent="center">
-         {/* 검색창 */}
+          {/* 검색창 */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              style={{ color: '#898989', margin: 'auto' }} 
+              style={{ color: '#898989', margin: 'auto' }}
               placeholder="검색어를 입력하세요."
               inputProps={{ 'aria-label': 'search' }}
               value={searchTerm}
@@ -135,33 +135,34 @@ export default function MainPage() {
           </Search>
         </Grid>
         {/* 아이콘 */}
-        <PersonOutlineIcon  
-        sx={{ fontSize: '40px', color: '#6E6E6E', marginRight: "1rem" }}
-        onClick={()=>{navigate("/mypage")}}/>
-        <MailOutlineIcon  
-        sx={{ fontSize: '40px', color: '#6E6E6E' }} 
-        onClick={()=>{navigate("/note")}}/>
+        <PersonOutlineIcon
+          sx={{ fontSize: '40px', color: '#6E6E6E', marginRight: "1rem" }}
+          onClick={() => { navigate("/mypage") }} />
+        <MailOutlineIcon
+          sx={{ fontSize: '40px', color: '#6E6E6E' }}
+          onClick={() => { navigate("/note") }} />
       </Toolbar>
-       {/* 배너 */}
-          <Grid container style={styles.container}>
-          <img src={Guide} alt="" style={styles.image} />
-        </Grid>
+      {/* 배너 */}
+      <Grid container style={styles.container}>
+        <img src={Guide} alt="" style={styles.image} />
+      </Grid>
 
-    {/* 게시글 헤더 */}
+      {/* 게시글 헤더 */}
       <Grid container direction="column" justifyContent="space-around" alignItems="center">
-        <Grid container style={{ fontSize:'25px', padding: '3rem 1rem 2rem 1rem', fontWeight: 'bold', color: '#414141' }}>
-      <Grid item xs={4} />
-      <Grid item xs={4} style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        글 목록
-      </Grid>
-      <Grid item xs={4} style={{ textAlign: 'center'}}>
-        <Chip
-          style={{ fontSize: "20px", width: "10rem", height: "3rem"}}
-          icon={<DriveFileRenameOutlineTwoToneIcon fontSize='large'/>}
-          label="글쓰기"
-          onClick={()=>{navigate("/createpost")}}
-        />
-      </Grid>
+        <Grid container style={{ fontSize: '25px', padding: '3rem 1rem 2rem 1rem', fontWeight: 'bold', color: '#414141' }}>
+          <Grid item xs={4} />
+          <Grid item xs={4} style={{ textAlign: 'center', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            글 목록
+          </Grid>
+          <Grid item xs={4} style={{ textAlign: 'center' }}>
+            <Chip
+              style={{ fontSize: "20px", width: "10rem", height: "3rem" }}
+              icon={<DriveFileRenameOutlineTwoToneIcon fontSize='large' />}
+              label="글쓰기"
+              onClick={() => { navigate("/createpost") }}
+            />
+          </Grid>
+        </Grid>
       </Grid>
 
        {/* 게시글 목록 */}
@@ -195,7 +196,7 @@ export default function MainPage() {
     </React.Fragment>
   ))}
 </List>
-            </Grid>
+        
             
     </ThemeProvider>
   );
