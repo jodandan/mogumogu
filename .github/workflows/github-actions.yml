@@ -1,17 +1,14 @@
 name: mogumogu front 'action' CI/CD
 on:
-  push:
-    branches:
-      - actions
-#  pull_request:
-#    types: [closed]
-#    workflow_dispatch:
+  pull_request:
+    types: [closed]
+    workflow_dispatch:
 permissions:
   contents: read
 jobs:
   build:
     runs-on: ubuntu-latest
-#    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
     steps:
       - name: checkout
         uses: actions/checkout@master
@@ -23,3 +20,14 @@ jobs:
           docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
           docker build -t ${{ secrets.DOCKER_USERNAME }}/react .
           docker push ${{ secrets.DOCKER_USERNAME }}/react:latest
+      - name : EC2 Docker Run
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
+          key: ${{ secrets.EC2_KEY }} # pem 키
+        script: |
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker pull joowojr/react:latest
+          docker run -p 3000:3000 --name react joowojr/react:latest
+          docker image prune -af
