@@ -37,6 +37,6 @@ jobs:
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm react
+            docker rm -f react
             docker run -p -d 3000:3000 --name react ${{ secrets.DOCKER_USERNAME }}/react:latest
             docker image prune -af
