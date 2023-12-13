@@ -73,25 +73,27 @@ const SendButton = styled.button`
   background: var(--gray-100, #e1e1e1);
 `;
 
+//팝업창 전체
 const Popup = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 80vw; 
-  max-width: 600px;
+  width: 40%; 
 `;
+
 
 const PopupContent = styled.div`
   background: white;
-  padding: 1vw; 
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   display: flex;
   flex-direction: column;
+  width: 100%;
 
   input {
-    width: 100vw; 
+    width: 50%; 
     height: 12vw; 
     border: none;
     border-radius: 5px;

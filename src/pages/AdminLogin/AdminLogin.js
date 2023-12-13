@@ -4,56 +4,128 @@ import styled from 'styled-components';
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Header from './../../components/Header/Header';
 
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import modangBack from "../../../assets/modangBack.png";
+import axios from "axios";
+
+
+const defaultTheme = createTheme();
+
 export default function Admin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  
+
   const handleBackButtonClick = () => {
     navigate('/');
-};
-
-  const handleIdChange = (e) => {
-    setId(e.target.value);
   };
 
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
+  const handleSignUp = (event) => {
+    event.preventDefault();
+    const data = {
+      username: id,
+      password: password,
+    };
+
+    const userid = id;
+
+
+    localStorage.setItem('userid', userid);
+
+    console.log(data);
+
+    axios.post('http://dana-seo.shop/api/join/process', data)
+      .then(response => {
+        console.log(response.data);
+        navigate('/'); // API 요청 성공시 라우팅
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
-  const handleLogin = () => {
-    console.log('ID:', id, 'PASSWORD:', password);
-    navigate('/adminpost');
-  };
   return (
-    <div>
-        <Header />
-      <div style={{ padding: '2rem' }}>
-        <div>
-          <BackButton>
-            <BackbuttonIcon onClick={handleBackButtonClick} />
-          </BackButton>
+    <>
+      <Header />
+      <ThemeProvider theme={defaultTheme}>
+        <div style={{ padding: '2rem' }}>
+          <BackbuttonIcon onClick={handleBackButtonClick} />
         </div>
-        <Title>
-          Admin
-        </Title>
-        <LoginBox>
-          <div style={{ paddingLeft: '7rem' }}>
-            <InputLabel>ID</InputLabel>
-            <InputField type="text" value={id} placeholder="아이디를 입력해주세요" onChange={handleIdChange} />
-          </div>
-          <div style={{ paddingLeft: '7rem', marginTop:'3rem' }}>
-            <InputLabel>Password</InputLabel>
-            <InputField type="password" value={password} placeholder="비밀번호를 입력해주세요" onChange={handlePasswordChange} />
-          </div>
-          <LoginButtonBox>
-            <LoginButton onClick={handleLogin}>로그인</LoginButton>
-          </LoginButtonBox>
-        </LoginBox>
-      </div>
-    </div>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              marginTop: '5'
+            }}
+          >
+
+            {/* <img src={modangBack} width="60px" alt='' /> */}
+            <Typography component="h1" variant="h4" style={{ fontWeight: 'bold' }}>
+              Admin
+            </Typography>
+            <Box component="form" noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}>
+              <Grid container marginTop="1.5rem" spacing={2}>
+                <Grid item xs={12}>
+                  ID
+                  <TextField
+                    required
+                    fullWidth
+                    id="id"
+                    label="이메일을 입력해주세요."
+                    name="id"
+                    autoComplete="id"
+                    value={id}
+                    onChange={(e) => setId(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  PASSWORD
+                  <TextField
+                    required
+                    fullWidth
+                    name="password"
+                    label="비밀번호를 입력해주세요."
+                    type="password"
+                    id="password"
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+
+                </Grid>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 6, mb: 2 }}
+                style={{ backgroundColor: "#004E96" }}
+                onClick={handleSignUp}
+              >
+                로그인
+              </Button>
+
+            </Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+    </>
   )
 }
+
 
 const BackButton = styled.button`
     stroke: #555454;

@@ -10,8 +10,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import modangBack from "../../../assets/modangBack.png"
-import { ReactComponent as BackbuttonIcon } from "../../../assets/Backbutton_icon.svg"
-import axios from "axios"
+import { ReactComponent as BackbuttonIcon } from "../../../assets/Backbutton_icon.svg";
+import axios from "axios";
 
 
 const defaultTheme = createTheme();
