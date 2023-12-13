@@ -1,4 +1,4 @@
-name: mogumogu front 'develop' CI/CD
+name: mogumogu front 'action' CI/CD
 on:
   push:
     branches : [actions]
