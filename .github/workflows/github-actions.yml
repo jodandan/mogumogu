@@ -27,7 +27,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/react:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/react:latest
       - name : EC2 Docker Run
         uses: appleboy/ssh-action@master
