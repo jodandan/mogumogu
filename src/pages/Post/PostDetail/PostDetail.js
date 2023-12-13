@@ -29,7 +29,7 @@ export default function PostDetail() {
     navigate('/mainpage');
   };
 
-
+// 게시글 get api
 useEffect(() => {
   const fetchPosts = async () => {
     try {
@@ -47,6 +47,43 @@ useEffect(() => {
   
   fetchPosts();
 }, [postId]);
+
+// 게시글 삭제 api
+const deleteArticle = async () => {
+  try {
+  
+      await axios.delete('http://dana-seo.shop/api/article/delete', {
+        params: {
+          articleId: postId
+        }
+      });
+      alert('게시글이 삭제되었습니다.');
+      navigate('/mainpage'); 
+    
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+ //게시글 신고하기 api
+ const createArticleComplain = async () => {
+  try {
+    const response = await axios.patch(
+      'http://dana-seo.shop/api/article/addComplain',
+      null,
+      {
+        params: {
+          articleId: postId,
+        },
+      }
+    );
+    // API 호출 성공 시 알림창 표시
+    alert('신고가 완료되었습니다.');
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   return (
     <>
       <div style={{ padding: '3rem' }}>
@@ -75,8 +112,8 @@ useEffect(() => {
       </Grid>
       <Grid item style={{ marginLeft: 'auto', paddingRight:'2rem' }}>
         <ButtonGroup variant="text" aria-label="outlined button group">
-          <Button style={{ color: '#000000' }}>삭제</Button>
-          <Button style={{ color: '#000000' }}>신고하기</Button>
+          <Button onClick={deleteArticle} style={{ color: '#000000' }}>삭제</Button>
+          <Button onClick={createArticleComplain} style={{ color: '#000000' }}>신고하기</Button>
         </ButtonGroup>
       </Grid>
     </Grid>
