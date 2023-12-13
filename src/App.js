@@ -40,7 +40,7 @@ function App() {
 
 
         <Route path="/note" element={<Note />} />
-        <Route path="/note/:noteId" element={<NoteDetailPage notesData={notesData} />} />
+        <Route path="/note/:noteId" element={<NoteDetailPage />} />
 
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/adminlogin" element={<AdminLogin />} />

@@ -1,5 +1,6 @@
 //하나의 게시물을 클릭했을때 나오는 페이지
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Header from '../Header/Header';
@@ -24,26 +25,16 @@ import passbook from '../../assets/passbook.png';
 
 
 
-const NoteDetailPage = ({ notesData }) => {
+const NoteDetailPage = ({ post }) => {
+    let { noteId } = useParams();
+    const [detail, setDetail] = useState([]);
     const [isPopupVisible, setPopupVisibility] = useState(false);
-    const { noteId } = useParams();
     const navigate = useNavigate();
-    const note = notesData.find((n) => n.id === parseInt(noteId, 10));
 
-    if (!note) {
-        return <div>Note not found</div>;
-    }
 
     const handleBackButtonClick = () => {
         navigate('/note');
     };
-
-    // 하드코딩 데이터
-    const comments = [
-        { id: 1, sender: '깜장콩', content: 'Hello!', timestamp: '2023-01-01 12:00' },
-        { id: 2, sender: '김조단', content: 'Hi there!', timestamp: '2023-01-01 13:00' },
-        { id: 3, sender: '깜장콩', content: 'How are you?', timestamp: '2023-01-01 14:00' },
-    ];
 
     const handlePlusButtonClick = () => {
         setPopupVisibility(true);
@@ -54,6 +45,26 @@ const NoteDetailPage = ({ notesData }) => {
         // 팝업 닫기
         setPopupVisibility(false);
     };
+
+    //내 쪽지함 조회 GET API
+
+
+    //게시글 쪽지함 조회 GET API
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                console.log(response.data);
+                setDetail(response.data);
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchPosts();
+    }, [noteId]);
+
 
     return (
         <div>
@@ -95,23 +106,34 @@ const NoteDetailPage = ({ notesData }) => {
                 </Drawer>
                 <PostBody>
                     <ul>
-                        {comments.map((comment) => (
-                            <Comment key={comment.id}>
-                                <div style={{ width: '100%' }}>
+                        {detail.map((post) => (
+                            <Comment key={post.id}>
+                                <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px'}}>
                                     <div>
                                         <p style={{
-                                            fontSize: '20px',
+                                            color: '#EDB96A',
+                                            fontSize: '27px',
                                             fontStyle: 'normal',
                                             fontWeight: '700',
                                             lineHeight: 'normal',
-                                            color: '#EDB96A'
-                                        }}>{comment.sender}</p>
+                                        }}>{post.nickName}</p>
                                     </div>
                                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <p>{comment.content}</p>
-                                        <p>{comment.timestamp}</p>
+                                        <p>{post.content}</p>
                                     </div>
                                 </div>
+                                {post.messages.map((message) => (
+                                    <div key={message.id} style={{borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px'}}>
+                                        <p style={{
+                                            color: '#338379',
+                                            fontSize: '27px',
+                                            fontStyle: 'normal',
+                                            fontWeight: '700',
+                                            lineHeight: 'normal',
+                                        }}>{message.sender}</p>
+                                        <p>{message.content}</p>
+                                    </div>
+                                ))}
                             </Comment>
                         ))}
                     </ul>
@@ -156,7 +178,7 @@ const PostBody = styled.div`
 `;
 
 const Comment = styled.div`
-    border-bottom: 1px solid #ccc;
+    
     padding: 10px;
     p {
       margin: 3px;
@@ -177,8 +199,8 @@ const Text = styled.div`
     line-height: normal;
     height: 20px;
     flex-shrink: 0;
-    padding: 30px 46px 50px 46px;
-    width: 50vw;
+    padding: 5px 46px 20px 46px;
+    width: 20vw;
 `;
 
 

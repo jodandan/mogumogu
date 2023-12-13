@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg';
@@ -7,13 +8,74 @@ import PostList from '../../components/MypagePagination/PostList';
 import postData from '../../components/MypagePagination/MypagepostData';
 import Header from './../../components/Header/Header';
 
+import Pagination from 'react-js-pagination';
+
 export default function Mypage() {
     const navigate = useNavigate();
+    const [userArticles, setUserArticles] = useState([]);
+    const [nickname, setNickname] = useState([]);
+    const [username, setUsername] = useState([]);
+
+
+
+    const itemsPerPage = 5;
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const indexOfLastPost = currentPage * itemsPerPage;
+    const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+    const currentPosts = userArticles.slice(indexOfFirstPost, indexOfLastPost);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const handleBackButtonClick = () => {
         navigate('/mainpage');
     };
-    
+
+    useEffect(() => {
+        const userIdFromLocalStorage = localStorage.getItem('userId');
+
+        if (!userIdFromLocalStorage) {
+            console.error('UserId not found in local storage');
+            return;
+        }
+
+        const fetchUserArticles = async () => {
+            try {
+                const response = await axios.get(`http://dana-seo.shop/api/user/getUserArticles?userId=${userIdFromLocalStorage}`);
+                setUserArticles(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error fetching user articles:', error);
+            }
+        };
+
+        fetchUserArticles();
+    }, []);
+
+    useEffect(() => {
+        const userIdFromLocalStorage = localStorage.getItem('userId');
+
+        if (!userIdFromLocalStorage) {
+            console.error('UserId not found in local storage');
+            return;
+        }
+
+        const fetchUsernickName = async () => {
+            try {
+                const response = await axios.get(`http://dana-seo.shop/api/user/get?userId=${userIdFromLocalStorage}`);
+                setNickname(response.data.nickName);  // Access nickName property from the response.data
+                setUsername(response.data.username);  // Access username property from the response.data
+            } catch (error) {
+                console.error('Error fetching user info:', error);
+            }
+        };
+        
+        fetchUsernickName();
+    }, []);
+
+
     return (
         <div>
             <Header />
@@ -26,13 +88,29 @@ export default function Mypage() {
                 </TitleBox>
                 <Container>
                     <div style={{ padding: '1rem' }}>
-                        <ServiceTitle>모구모구</ServiceTitle>
-                        <UserEmail>wdd789q@gachon.ac.kr</UserEmail>
+                        <ServiceTitle>{nickname}</ServiceTitle>
+                        <UserEmail>{username}</UserEmail>
                     </div>
                 </Container>
                 <div>
                     <Text>내가쓴글</Text>
-                    <PostList posts={postData} />
+                    <ListContainer>
+                        {currentPosts.map((post) => (
+                            <ListItem key={post.id}>
+                                <ListTitle>{post.title}</ListTitle>
+                            </ListItem>
+                        ))}
+                    </ListContainer>
+
+                    <PaginationContainer>
+                        <Pagination
+                            activePage={currentPage}
+                            itemsCountPerPage={itemsPerPage}
+                            totalItemsCount={userArticles.length}
+                            pageRangeDisplayed={5}
+                            onChange={handlePageChange}
+                        />
+                    </PaginationContainer>
                 </div>
             </div>
         </div>
@@ -103,3 +181,28 @@ const Text = styled.div`
     line-height: normal;
 `;
 
+const ListContainer = styled.div`
+    padding: 2rem;
+`;
+
+const ListItem = styled.div`
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+`;
+
+const ListTitle = styled.div`
+    color: #4F4E4E;
+    font-family: Noto Sans;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+`;
+
+
+const PaginationContainer = styled.div`
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+`;
