@@ -138,7 +138,17 @@ export default function PostDetail() {
               <Typography variant="body5" style={{ marginLeft: '4rem', fontSize: '20px', color: '#7C7C7C' }}>
                 모집인원 {detail.numberOfPeople}
               </Typography>
-
+              <div style={{
+                marginLeft: '4rem',
+                padding: '10px 20px',
+                backgroundColor: '#FFFBD7',
+                borderRadius: '15px',
+                display: 'inline-block'
+              }}>
+             <Typography variant="body5" style={{ fontSize: '20px', color: '#7C7C7C' }}>
+              {detail.transactionStatus === 'RECRUITOPEN' ? '🔥모집중' : '🍀모집 완료'}
+            </Typography>
+            </div>
             </Grid>
             <Grid item style={{ marginLeft: 'auto', paddingRight: '2rem' }}>
               <ButtonGroup variant="text" aria-label="outlined button group">
