@@ -196,7 +196,8 @@ export default function PostDetail() {
                   height: '60px',
                 }}
                 onClick={handleButtonClick}
-              >공동구매 참여하기
+                disabled={detail.transactionStatus !== 'RECRUITOPEN'} //// 모집중이 아닐 때 비활성화
+              >쪽지 보내기
               </Button>
               {isPopupVisible && (
                 <Popup>
