@@ -8,6 +8,8 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux'; 
+import { login } from "../../../redux/userSlice"
 import axios from 'axios';
 
 
@@ -16,7 +18,8 @@ const defaultTheme = createTheme();
 export default function SignIn() {
 
   const [errorMessage, setErrorMessage] = useState("");
-
+  
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => { 
     event.preventDefault();
@@ -25,6 +28,8 @@ export default function SignIn() {
 
     const username = data.get('email');
     const password = data.get('password');
+
+    
 
     // API 요청
     try {
@@ -41,7 +46,8 @@ export default function SignIn() {
       console.log(localStorage.getItem('userId')); // 로컬 스토리지에 저장된 userId 출력
       console.log(localStorage.getItem('token')); // 로컬 스토리지에 저장된 token 출력
       
-
+      dispatch(login({ token: response.data.token, userId: response.data.userId }));
+      
        navigate("/mainpage")
     } catch (error) {
       if (error.response && error.response.status === 401) {
