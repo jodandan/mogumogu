@@ -1,66 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 import Category from '../../../components/AdminCategory/Category';
-import MemberData from './MemberData';
 import Pagination from 'react-js-pagination';
 
 
 const itemsPerPage = 5;
 
 export default function AdminMember() {
-    const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [memberData, setMemberData] = useState([]);
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentPosts = MemberData.slice(startIndex, endIndex);
+  useEffect(() => {
+    const fetchMembers = async () => {
+      const adminToken = localStorage.getItem('adminToken');
+      if (!adminToken) {
+        console.error('Admin token not found in local storage');
+        return;
+      }
 
-    const totalPages = Math.ceil(MemberData.length / itemsPerPage);
+      try {
+        const response = await axios.get('http://dana-seo.shop/api/user/admin/getAll', {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        });
 
-    const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        setMemberData(response.data);
+        console.log('Fetched member data:', response.data)
+      } catch (error) {
+        console.error('Error fetching members:', error);
+      }
     };
 
-    const handleApproval = (postId) => {
-        // Implement your approval logic here
-        console.log(`Approving transaction with id ${postId}`);
-    };
+    fetchMembers();
+  }, [currentPage]);
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPosts = memberData.slice(startIndex, endIndex);
+
+  const totalPages = Math.ceil(memberData.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const handleApproval = async (userId) => {
+    const adminToken = localStorage.getItem('adminToken');
+    if (!adminToken) {
+      console.error('Admin token not found in local storage');
+      return;
+    }
+
+    try {
+      await axios.delete(`http://dana-seo.shop/api/user/delete?userId=${userId}`, {
+        headers: {
+          Authorization: `Bearer ${adminToken}`,
+        },
+      });
+
+      // Update memberData after successful deletion
+      setMemberData((prevData) => prevData.filter((user) => user.id !== userId));
 
 
-    
-    return (
-        <div>
-            <Category />
-            <TitleBox>
-                <BoardTitle>번호</BoardTitle>
-                <Id>아이디</Id>
-                <Password>비밀번호</Password>
-                <Nickname>닉네임</Nickname>
-                <ReportCount>신고횟수</ReportCount>
-            </TitleBox>
-            {currentPosts.map((post) => (
-                <BoardItem key={post.id}>
-                    <Number>{post.number}</Number>
-                    <PostId>{post.email}</PostId>
-                    <PostPassword>{post.password}</PostPassword>
-                    <PostNickname>{post.nickname}</PostNickname>
-                    <PostReportCount>{post.reportCount}</PostReportCount>
-                    <Button onClick={() => handleApproval(post.id)}>회원 삭제</Button>
-                </BoardItem>
-            ))}
-            {totalPages > 1 && (
-                <PaginationContainer>
-                    <Pagination
-                        activePage={currentPage}
-                        itemsCountPerPage={itemsPerPage}
-                        totalItemsCount={MemberData.length}
-                        pageRangeDisplayed={5}
-                        onChange={handlePageChange}
-                    />
-                </PaginationContainer>
-            )}
-        </div>
-    );
+      console.log(`User with id ${userId} deleted successfully`);
+    } catch (error) {
+      console.error('Error deleting user:', error);
+    }
+  };
+
+
+
+  return (
+    <div>
+      <Category />
+      <TitleBox>
+        <BoardTitle>번호</BoardTitle>
+        <Id>아이디</Id>
+        <Password>비밀번호</Password>
+        <Nickname>닉네임</Nickname>
+        <ReportCount>신고횟수</ReportCount>
+      </TitleBox>
+      {currentPosts.map((post) => (
+        <BoardItem key={post.id}>
+          <Number>{post.id}</Number>
+          <PostId>{post.username}</PostId>
+          <PostPassword>{post.password.slice(0, 5)}...</PostPassword>
+          <PostNickname>{post.nickName}</PostNickname>
+          <PostReportCount>{post.reportCount}</PostReportCount>
+          <Button onClick={() => handleApproval(post.id)}>회원 삭제</Button>
+        </BoardItem>
+      ))}
+      {totalPages > 1 && (
+        <PaginationContainer>
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={itemsPerPage}
+            totalItemsCount={memberData.length}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+          />
+        </PaginationContainer>
+      )}
+    </div>
+  );
 }
 
 const TitleBox = styled.div`

@@ -27,7 +27,6 @@ jobs:
           host: ${{ secrets.EC2_HOST }} # EC2 인스턴스 퍼블릭 DNS
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/react:latest
             docker pull ${{ secrets.DOCKER_USERNAME }}/react:latest
       - name : EC2 Docker Run
         uses: appleboy/ssh-action@master
@@ -37,6 +36,6 @@ jobs:
           key: ${{ secrets.EC2_KEY }} # pem 키
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker rm react
-            docker run -p -d 3000:3000 --name react ${{ secrets.DOCKER_USERNAME }}/react:latest
+            docker rm -f react
+            docker run -p 3000:80 --name react ${{ secrets.DOCKER_USERNAME }}/react:latest
             docker image prune -af
