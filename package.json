@@ -8,6 +8,7 @@
     "@mui/icons-material": "^5.14.19",
     "@mui/material": "^5.14.20",
     "@mui/styles": "^5.14.20",
+    "@reduxjs/toolkit": "^2.0.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -28,16 +29,13 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  
   "proxy": "http://dana-seo.shop",
-
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
     ]
   },
-
   "browserslist": {
     "production": [
       ">0.2%",

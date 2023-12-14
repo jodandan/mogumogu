@@ -1,20 +1,75 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Grid, Typography, Container, Button, ButtonGroup } from '@mui/material';
+import { Grid, Typography, Container, Button, ButtonGroup, TextField } from '@mui/material';
 import { useNavigate } from 'react-router';
 import { ReactComponent as BackbuttonIcon } from "../../../assets/Backbutton_icon.svg"
 import PersonIcon from '@mui/icons-material/Person';
 import BoxImg from "../../../assets/BoxImg.png"
+import CloseIcon from '@mui/icons-material/Close';
 import { useParams } from "react-router-dom";
 import axios from 'axios';
+
+// 팝업창 스타일링
+const StyledPopup = styled(Grid)`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80vw;
+  max-width: 600px;
+  z-index: 2;
+`;
+
+const StyledPopupContent = styled(Grid)`
+  background: white;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+
+  .input-container {
+    margin-bottom: 1rem;
+  }
+`;
+
+const StyledTitle = styled.div`
+  width: 100%;
+  flex-shrink: 0;
+  color: var(--black, #000);
+  font-family: HeadlandOne;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 140%;
+  padding: 1rem;
+`;
+
+const StyledSendButton = styled(Button)`
+  width: 100%;
+  height: 54px;
+  border-radius: 4px;
+  background: var(--gray-100, #e1e1e1);
+`;
+
+const StyledCloseButton = styled(Button)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0.5rem;
+`;
+
 
 export default function PostDetail() {
   const [detail, setDetail] = useState('')
   const [messageContent, setMessageContent] = useState('');
-
+  const [isPopupVisible, setPopupVisible] = useState(false);
 
   let { postId } = useParams();
-  const [isPopupVisible, setPopupVisible] = useState(false);
+
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+  };
 
   const handleButtonClick = () => {
     setPopupVisible(true);
@@ -200,23 +255,32 @@ export default function PostDetail() {
               >쪽지 보내기
               </Button>
               {isPopupVisible && (
-                <Popup>
-                  <PopupContent>
-                    <Title>쪽지 보내기</Title>
-                    <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>
-                      <p>내용</p>
-                      <NoteInput
-                        placeholder="Type your message here"
-                        style={{ width: '34vw' }}
+                <StyledPopup container>
+                  <StyledPopupContent container direction="column" spacing={2}>
+                  <StyledCloseButton onClick={handleClosePopup}>
+                    <CloseIcon />
+                  </StyledCloseButton>
+                    <Grid item>
+                      <StyledTitle>쪽지 보내기</StyledTitle>
+                    </Grid>
+                    <Grid item className="input-container">
+                      <TextField
+                        placeholder="내용을 입력해주세요."
+                        variant="outlined"
+                        fullWidth
+                        multiline
+                        rows={4}
                         value={messageContent}
                         onChange={handleNoteInputChange}
                       />
-                    </div>
-                    <Button onClick={handleSendMessageClick} style={{ width: '37vw', height: '54px', borderRadius: '4px', background: 'var(--gray-100, #e1e1e1)' }}>
-                      확인
-                    </Button>
-                  </PopupContent>
-                </Popup>
+                    </Grid>
+                    <Grid item>
+                      <StyledSendButton onClick={handleSendMessageClick}>
+                        확인
+                      </StyledSendButton>
+                    </Grid>
+                  </StyledPopupContent>
+                </StyledPopup>
               )}
             </Grid>
           </Grid>
@@ -230,55 +294,3 @@ export default function PostDetail() {
     </>
   );
 }
-
-const Popup = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80vw; 
-  max-width: 600px;
-  z-index: 2;
-`;
-
-const PopupContent = styled.div`
-  background: white;
-  padding: 1vw; 
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-
-  input {
-    width: 100vw; 
-    height: 12vw; 
-    border: none;
-    border-radius: 5px;
-    padding: 0.5vw; 
-    margin-bottom: 1vw; 
-    border: 1px solid #ccc;
-  }
-`;
-
-const Title = styled.div`
-  width: 100vw; 
-  flex-shrink: 0;
-  color: var(--black, #000);
-  font-family: HeadlandOne;
-  font-size: 2.4vw; 
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%;
-  padding: 1vw; 
-`;
-
-const NoteInput = styled.input`
-    width: 10vw; 
-`;
-
-const SendButton = styled.button`
-  width: 37vw; 
-  height: 54px;
-  border-radius: 4px;
-  background: var(--gray-100, #e1e1e1);
-`;
