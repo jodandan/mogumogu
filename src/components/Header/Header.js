@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useState, useEffect} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -8,11 +8,37 @@ import Button  from '@mui/material/Button';
 import Grid from '@mui/system/Unstable_Grid/Grid';
 import modang from "../../assets/modang.png"
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 
 
 export default function Header() {
+
   const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('access_token') !== null);
+  const user = useSelector((state) => state.user);
+  const [logoutSuccess, setLogoutSuccess] = useState(false);
+
+  useEffect(() => {
+    const checkLoginStatus = () => {
+      setIsLoggedIn(localStorage.getItem('token') !== null);
+    };
+  
+    window.addEventListener('storage', checkLoginStatus);
+  
+    return () => {
+      window.removeEventListener('storage', checkLoginStatus);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    navigate('/');
+  };
+
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" style={{ backgroundColor: "#004E96" }}>
@@ -39,7 +65,11 @@ export default function Header() {
               >
                 회원정보
               </Button>
-              <Button style={{ color: "white" }}>로그아웃</Button>
+              {user.isLoggedIn ? (
+         <Button style={{ color: "white" }} onClick={handleLogout} >로그아웃</Button>
+        ) : (
+          <Button style={{ color: "white" }} onClick={() => navigate('/')}>로그인</Button>
+        )}
             </ButtonGroup>
           </Grid>
         </Toolbar>

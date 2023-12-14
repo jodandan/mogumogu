@@ -10,18 +10,18 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import Typography from '@mui/material/Typography';
+import SendIcon from '@mui/icons-material/Send';
+import { InputAdornment, IconButton, Box, TextField} from '@mui/material';
 
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Plusbutton from '../../assets/Plusbutton.png'
 
-import InputComment from './InputComment';
 
 import dollar from '../../assets/dollar.png';
 import checkmark from '../../assets/checkmark.png';
 import passbook from '../../assets/passbook.png';
+import { Grid } from '@mui/material';
 
 
 
@@ -119,24 +119,34 @@ const NoteDetailPage = ({ post }) => {
                         />
                     </PlusButtonBox>
                 </TitleBox>
-                <Drawer anchor="top" open={isPopupVisible} onClose={() => setPopupVisibility(false)}>
+                <Drawer anchor="top" open={isPopupVisible} onClose={() => setPopupVisibility(false)} style={{ margin: '2rem' }}> {/* margin 추가 */}
+  <List style={{  margin:"2rem 0", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} disablePadding> {/* 방향과 정렬 변경 */}
+    {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
+      <ListItem key={text} button={false} style={{ borderBottom: 'none' }}>
+        <ListItemButton onClick={() => handlePopupOptionClick(text)} disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <ListItemIcon>
+            {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+            {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+            {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+          </ListItemIcon>
+          <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>{text}</Typography>} />
+        </ListItemButton>
+      </ListItem>
+    ))}
+    <ListItem button={false} style={{ borderBottom: 'none' }}>
+      <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem'}}>진행 현황 : 거래 승인</Typography>} />
+      </ListItemButton>
+    </ListItem>
+  </List>
+</Drawer>
 
-                    <List>
-                        {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton onClick={() => handlePopupOptionClick(text)}>
-                                    <ListItemIcon>
-                                        {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                        {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                        {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Text>진행 현황 : {detail.length > 0 && detail[0].transactionStatus}</Text>
-                </Drawer>
+
+
+
+
+
+<Grid container style={{ maxWidth: '100%', padding:"0 3rem"}}>
                 <PostBody>
                     <ul>
                         {detail.map((post) => (
@@ -170,8 +180,47 @@ const NoteDetailPage = ({ post }) => {
                             </Comment>
                         ))}
                     </ul>
-                    <InputComment />
+                    <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
+  <TextField
+    hiddenLabel
+    id="filled-hidden-label-normal"
+    placeholder="댓글을 입력하세요."
+    variant="filled"
+    multiline
+    fullWidth
+    size="small"
+   
+    
+    InputProps={{
+      style: {
+        height: '80px', // 텍스트 박스의 높이 조정
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton >
+            <SendIcon />
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+    sx={{
+      '& .MuiFilledInput-root': {
+        backgroundColor: 'lightgray',
+        fontSize: '20px', // 텍스트 크기 조정
+        '&::placeholder': {
+          fontSize: '20px', // placeholder 크기 조정
+          textAlign: 'center', // placeholder 가운데 정렬
+          paddingTop: '5px', // placeholder 위쪽 여백 추가
+        },
+      },
+    }}
+  />
+</Box>
                 </PostBody>
+                </Grid>
             </div>
         </div>
     );
@@ -208,6 +257,8 @@ const Title = styled.div`
 const PostBody = styled.div`
     width: 100%;
     height: 100%; 
+    overflow-y: auto; /* 스크롤바를 추가하여 화면이 넘칠 때 스크롤할 수 있도록 함 */
+    padding-bottom: 100px; /* 인풋창이 가려지지 않도록 하기 위한 여유 공간 */
 `;
 
 const Comment = styled.div`
@@ -234,6 +285,31 @@ const Text = styled.div`
     flex-shrink: 0;
     padding: 5px 46px 20px 46px;
     width: 20%;
+`;
+
+//인풋창
+
+
+
+const InputBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1vw;
+  width: 92vw;
+  max-width: 600px;
+  position: fixed; 
+  bottom: 0;
+  
+`;
+const Input = styled.input`
+  position: relative;
+  width: 92vw; 
+  height: 60px;
+  border-radius: 15px;
+  background: #f3f1f1;
+  border: none;
+  padding: 0.5vw; 
+  margin-bottom: 1vw; 
 `;
 
 
