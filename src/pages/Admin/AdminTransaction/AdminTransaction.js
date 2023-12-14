@@ -1,35 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 import Category from '../../../components/AdminCategory/Category';
-import TransactionData from './Transactiondata';
+
 import Pagination from 'react-js-pagination';
 
 
 const itemsPerPage = 5;
 
 export default function AdminTransaction() {
+    const [posts, setPosts] = useState([]); // 게시글 상태
     const [currentPage, setCurrentPage] = useState(1);
 
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentPosts = TransactionData.slice(startIndex, endIndex);
+    const currentPosts = posts.slice(startIndex, endIndex);
 
-    const totalPages = Math.ceil(TransactionData.length / itemsPerPage);
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
 
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
+    
+    //거래 승인
+    const handleApproval = async (articleId) => {
+        try {
 
-    const handleApproval = (postId) => {
-        // Implement your approval logic here
-        console.log(`Approving transaction with id ${postId}`);
+
+            const response = await axios.patch(`http://dana-seo.shop/api/article/admin/approve?articleId=${articleId}`);
+            const updatedPost = response.data;
+
+            setPosts(prevPosts => {
+                const index = prevPosts.findIndex(post => post.id === updatedPost.id);
+                const newPosts = [...prevPosts];
+                newPosts[index] = updatedPost;
+
+                return newPosts;
+            });
+            alert('관리자가 거래를 승인하였습니다');
+
+            const updatedResponse = await axios.get('http://dana-seo.shop/api/article/getAll');
+            setPosts(updatedResponse.data);
+        } catch (error) {
+            console.error('Error approving transaction:', error);
+            alert('거래 승인 중 에러가 발생했습니다.');
+        }
     };
 
-    const handleCompletion = (postId) => {
-        // Implement your completion logic here
-        console.log(`Completing transaction with id ${postId}`);
+    //최종 거래 완료
+    const handleCompletion = async (articleId) => {
+        try {
+            const response = await axios.patch(`http://dana-seo.shop/api/article/admin/final?articleId=${articleId}`);
+
+            const updatedPost = response.data;
+
+            setPosts(prevPosts => {
+                const index = prevPosts.findIndex(post => post.id === updatedPost.id);
+                const newPosts = [...prevPosts];
+                newPosts[index] = updatedPost;
+
+                return newPosts;
+            });
+    
+            alert('관리자가 최종 거래를 승인하였습니다');
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
     };
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+                setPosts(response.data);
+                console.log(response.data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchPosts();
+    }, []);
+
 
     return (
         <div>
@@ -41,11 +94,13 @@ export default function AdminTransaction() {
             </TitleBox>
             {currentPosts.map((post) => (
                 <BoardItem key={post.id}>
-                    <Number>{post.number}</Number>
+                    <Number>{post.id}</Number>
                     <PostTitle>{post.title}</PostTitle>
-                    <PostSituation>{post.situation}</PostSituation>
-                    <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
-                    <Button onClick={() => handleCompletion(post.id)}>거래 완료</Button>
+                    <PostSituation>{post.transactionStatus}</PostSituation>
+                    <div style={{ marginLeft: '8rem' }}>
+                        <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
+                        <Button onClick={() => handleCompletion(post.id)}>거래 완료</Button>
+                    </div>
                 </BoardItem>
             ))}
             {totalPages > 1 && (
@@ -53,7 +108,7 @@ export default function AdminTransaction() {
                     <Pagination
                         activePage={currentPage}
                         itemsCountPerPage={itemsPerPage}
-                        totalItemsCount={TransactionData.length}
+                        totalItemsCount={posts.length}
                         pageRangeDisplayed={5}
                         onChange={handlePageChange}
                     />
@@ -104,7 +159,7 @@ const BoardTitle = styled.div`
 
 
 const Situation = styled(BoardTitle)`
-    margin-left: 15rem;
+    margin-left: 7rem;
     width: 10%; 
 `;
 
@@ -134,7 +189,7 @@ const PostTitle = styled(Number)`
 
 
 const PostSituation = styled(Number)`
-    margin-left: 12rem;
+    margin-left: 6rem;
     width: 10%; 
 `;
 //==============================================================

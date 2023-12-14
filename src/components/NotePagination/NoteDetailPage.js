@@ -40,11 +40,46 @@ const NoteDetailPage = ({ post }) => {
         setPopupVisibility(true);
     };
 
-    const handlePopupOptionClick = (option) => {
+    const handlePopupOptionClick = async (option) => {
         console.log(`Selected option: ${option}`);
+
+        if (option === '입금 신청') {
+            axios.patch(`http://dana-seo.shop/api/article/deposit?articleId=${noteId}`)
+                .then(() => {
+                    alert("게시글 상태가 업데이트 됐습니다.");
+
+                    return axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                })
+                .then((response) => {
+                    setDetail(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error updating article status:', error);
+                });
+        }
+        else if (option === '거래 완료') {
+            try {
+                await axios.patch(`http://dana-seo.shop/api/article/transactionComplete?articleId=${noteId}`);
+                alert("게시글 상태가 '거래 완료'로 업데이트 되었습니다.");
+
+
+                const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                setDetail(updatedResponse.data);
+            } catch (error) {
+                console.error('Error updating article status:', error);
+            }
+        }
+
+        else if (option === '계좌 확인') {
+            // 가상의 계좌번호를 alert 창으로 보여줍니다.
+            alert('가상의 계좌번호: 123-456-789');
+        }
+
         // 팝업 닫기
         setPopupVisibility(false);
     };
+
+
 
     //내 쪽지함 조회 GET API
 
@@ -88,7 +123,7 @@ const NoteDetailPage = ({ post }) => {
   <List style={{  margin:"2rem 0", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} disablePadding> {/* 방향과 정렬 변경 */}
     {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
       <ListItem key={text} button={false} style={{ borderBottom: 'none' }}>
-        <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <ListItemButton onClick={() => handlePopupOptionClick(text)} disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
           <ListItemIcon>
             {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
             {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
@@ -116,7 +151,7 @@ const NoteDetailPage = ({ post }) => {
                     <ul>
                         {detail.map((post) => (
                             <Comment key={post.id}>
-                                <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px'}}>
+                                <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
                                     <div>
                                         <p style={{
                                             color: '#EDB96A',
@@ -131,7 +166,7 @@ const NoteDetailPage = ({ post }) => {
                                     </div>
                                 </div>
                                 {post.messages.map((message) => (
-                                    <div key={message.id} style={{borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px'}}>
+                                    <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
                                         <p style={{
                                             color: '#338379',
                                             fontSize: '27px',
@@ -249,7 +284,7 @@ const Text = styled.div`
     height: 20px;
     flex-shrink: 0;
     padding: 5px 46px 20px 46px;
-    width: 20vw;
+    width: 20%;
 `;
 
 //인풋창
