@@ -29,7 +29,7 @@
     "eject": "react-scripts eject"
   },
   
-  "proxy": "http://dana-seo.shop/",
+  "proxy": "http://dana-seo.shop",
 
   "eslintConfig": {
     "extends": [
