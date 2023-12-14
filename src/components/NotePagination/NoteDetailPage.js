@@ -12,7 +12,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import SendIcon from '@mui/icons-material/Send';
-import { InputAdornment, IconButton, Box, TextField} from '@mui/material';
+import { InputAdornment, IconButton, Box, TextField } from '@mui/material';
 
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Plusbutton from '../../assets/Plusbutton.png'
@@ -120,106 +120,107 @@ const NoteDetailPage = ({ post }) => {
                     </PlusButtonBox>
                 </TitleBox>
                 <Drawer anchor="top" open={isPopupVisible} onClose={() => setPopupVisibility(false)} style={{ margin: '2rem' }}> {/* margin 추가 */}
-  <List style={{  margin:"2rem 0", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} disablePadding> {/* 방향과 정렬 변경 */}
-    {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
-      <ListItem key={text} button={false} style={{ borderBottom: 'none' }}>
-        <ListItemButton onClick={() => handlePopupOptionClick(text)} disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <ListItemIcon>
-            {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-            {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-            {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-          </ListItemIcon>
-          <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>{text}</Typography>} />
-        </ListItemButton>
-      </ListItem>
-    ))}
-    <ListItem button={false} style={{ borderBottom: 'none' }}>
-      <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-        <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem'}}>진행 현황 : 거래 승인</Typography>} />
-      </ListItemButton>
-    </ListItem>
-  </List>
-</Drawer>
-
-
-
-
-
-
-<Grid container style={{ maxWidth: '100%', padding:"0 3rem"}}>
-                <PostBody>
-                    <ul>
-                        {detail.map((post) => (
-                            <Comment key={post.id}>
-                                <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-                                    <div>
-                                        <p style={{
-                                            color: '#EDB96A',
-                                            fontSize: '27px',
-                                            fontStyle: 'normal',
-                                            fontWeight: '700',
-                                            lineHeight: 'normal',
-                                        }}>{post.nickName}</p>
-                                    </div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <p>{post.content}</p>
-                                    </div>
-                                </div>
-                                {post.messages.map((message) => (
-                                    <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-                                        <p style={{
-                                            color: '#338379',
-                                            fontSize: '27px',
-                                            fontStyle: 'normal',
-                                            fontWeight: '700',
-                                            lineHeight: 'normal',
-                                        }}>{message.sender}</p>
-                                        <p>{message.content}</p>
-                                    </div>
-                                ))}
-                            </Comment>
+                    <List style={{ margin: "2rem 0", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} disablePadding> {/* 방향과 정렬 변경 */}
+                        {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
+                            <ListItem key={text} button={false} style={{ borderBottom: 'none' }}>
+                                <ListItemButton onClick={() => handlePopupOptionClick(text)} disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                    <ListItemIcon>
+                                        {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+                                        {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+                                        {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>{text}</Typography>} />
+                                </ListItemButton>
+                            </ListItem>
                         ))}
-                    </ul>
-                    <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
-  <TextField
-    hiddenLabel
-    id="filled-hidden-label-normal"
-    placeholder="댓글을 입력하세요."
-    variant="filled"
-    multiline
-    fullWidth
-    size="small"
-   
-    
-    InputProps={{
-      style: {
-        height: '80px', // 텍스트 박스의 높이 조정
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      },
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton >
-            <SendIcon />
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-    sx={{
-      '& .MuiFilledInput-root': {
-        backgroundColor: 'lightgray',
-        fontSize: '20px', // 텍스트 크기 조정
-        '&::placeholder': {
-          fontSize: '20px', // placeholder 크기 조정
-          textAlign: 'center', // placeholder 가운데 정렬
-          paddingTop: '5px', // placeholder 위쪽 여백 추가
-        },
-      },
-    }}
-  />
-</Box>
-                </PostBody>
+                        <ListItem button={false} style={{ borderBottom: 'none' }}>
+                            <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황 
+                                    {detail.length > 0 && detail[0].transactionStatus}</Typography>} />
+                            </ListItemButton>
+                        </ListItem>
+                    </List>
+                </Drawer>
+
+
+
+
+
+
+                <Grid container style={{ maxWidth: '100%', padding: "0 3rem" }}>
+                    <PostBody>
+                        <ul>
+                            {detail.map((post) => (
+                                <Comment key={post.id}>
+                                    <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
+                                        <div>
+                                            <p style={{
+                                                color: '#EDB96A',
+                                                fontSize: '27px',
+                                                fontStyle: 'normal',
+                                                fontWeight: '700',
+                                                lineHeight: 'normal',
+                                            }}>{post.nickName}</p>
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <p>{post.content}</p>
+                                        </div>
+                                    </div>
+                                    {post.messages.map((message) => (
+                                        <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
+                                            <p style={{
+                                                color: '#338379',
+                                                fontSize: '27px',
+                                                fontStyle: 'normal',
+                                                fontWeight: '700',
+                                                lineHeight: 'normal',
+                                            }}>{message.sender}</p>
+                                            <p>{message.content}</p>
+                                        </div>
+                                    ))}
+                                </Comment>
+                            ))}
+                        </ul>
+                        <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
+                            <TextField
+                                hiddenLabel
+                                id="filled-hidden-label-normal"
+                                placeholder="댓글을 입력하세요."
+                                variant="filled"
+                                multiline
+                                fullWidth
+                                size="small"
+
+
+                                InputProps={{
+                                    style: {
+                                        height: '80px', // 텍스트 박스의 높이 조정
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                    },
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <IconButton >
+                                                <SendIcon />
+                                            </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                sx={{
+                                    '& .MuiFilledInput-root': {
+                                        backgroundColor: 'lightgray',
+                                        fontSize: '20px', // 텍스트 크기 조정
+                                        '&::placeholder': {
+                                            fontSize: '20px', // placeholder 크기 조정
+                                            textAlign: 'center', // placeholder 가운데 정렬
+                                            paddingTop: '5px', // placeholder 위쪽 여백 추가
+                                        },
+                                    },
+                                }}
+                            />
+                        </Box>
+                    </PostBody>
                 </Grid>
             </div>
         </div>
