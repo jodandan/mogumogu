@@ -39,7 +39,7 @@ export default function Header() {
               >
                 회원정보
               </Button>
-              <Button style={{ color: "white" }}>로그아웃</Button>
+              <Button onClick={()=>(navigate("/"))} style={{ color: "white" }}>로그아웃</Button>
             </ButtonGroup>
           </Grid>
         </Toolbar>
