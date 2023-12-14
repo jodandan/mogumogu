@@ -9,6 +9,8 @@ import NoteListItem from './NoteListItem';
 import NoteDetailPage from './NoteDetailPage';
 import notesData from './data'; // snowflake import
 
+import { useNavigate } from 'react-router-dom';
+
 const itemsPerPage = 5;
 
 const Paging = () => {
@@ -22,7 +24,8 @@ const Paging = () => {
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
   const currentPosts = note.slice(indexOfFirstPost, indexOfLastPost);
-
+  const totalItemsCount = note.length;
+  
   const handlePageChange = (pageNumber) => {
     setPage(pageNumber);
     setSelectedNote(null); // Reset selected note when changing page
@@ -53,31 +56,36 @@ const Paging = () => {
     fetchUserArticles();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <div>
       <ul style={{ marginBottom: '10px' }}>
         <ListContainer>
-          {currentPosts.map((post) => (
-            // Use Link to navigate to the detail page
-            <Link to={`/note/${post.id}`} key={post.id}>
-              <ListItem onClick={() => handleNoteClick(post)}>
-                <ListTitle>{post.title}</ListTitle>
-              </ListItem>
-            </Link>
-          ))}
+        {currentPosts.map((post) => (
+        <ListItem key={post.id} onClick={() => handleNoteClick(post)}>
+          <ListTitle
+            onClick={() => {
+              navigate(`/note/${post.id}`);
+            }}
+          >
+            {post.title}
+          </ListTitle>
+        </ListItem>
+      ))}
         </ListContainer>
       </ul>
 
       {/* 페이징 컴포넌트 추가 */}
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={itemsPerPage}
-        totalItemsCount={notesData.length}
-        pageRangeDisplayed={5}
-        prevPageText="‹"
-        nextPageText="›"
-        onChange={handlePageChange}
-      />
+          <Pagination
+      activePage={page}
+      itemsCountPerPage={itemsPerPage}
+      totalItemsCount={totalItemsCount}
+      pageRangeDisplayed={5}
+      prevPageText="‹"
+      nextPageText="›"
+      onChange={handlePageChange}
+    />
     </div>
   );
 };

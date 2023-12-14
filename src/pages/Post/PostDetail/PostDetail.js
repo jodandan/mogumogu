@@ -67,10 +67,12 @@ export default function PostDetail() {
 
   let { postId } = useParams();
 
+  //팝업창 닫기
   const handleClosePopup = () => {
     setPopupVisible(false);
   };
-
+  
+  //뒤로 가기
   const handleButtonClick = () => {
     setPopupVisible(true);
   };

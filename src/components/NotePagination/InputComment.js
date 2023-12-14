@@ -23,7 +23,7 @@ export default function InputComment() {
   const handleCloseButtonClick = () => {
     setPopupVisibility(false);
   };
-
+  
 
   // 게시글 get api
   useEffect(() => {
@@ -71,6 +71,7 @@ export default function InputComment() {
   };
 
   return (
+    
     <InputBox>
       <Input
         type="text"
@@ -81,45 +82,27 @@ export default function InputComment() {
         src={sendmessage}
         alt="sendmessage"
       />
-      {isPopupVisible && (
-        <Popup>
-          <PopupContent>
-            <CloseButton onClick={handleCloseButtonClick}>X</CloseButton>
-            <Title>쪽지 보내기</Title>
-            <div style={{ display: 'flex', flexDirection: 'column', padding: '1rem' }}>
-              <p>내용</p>
-              <NoteInput
-                placeholder="Type your message here"
-                style={{ width: '34vw' }}
-                value={messageContent}
-                onChange={handleNoteInputChange}
-              />
-            </div>
-            <Button onClick={handleSendMessageClick} style={{ width: '37vw', height: '54px', borderRadius: '4px', background: 'var(--gray-100, #e1e1e1)' }}>
-              확인
-            </Button>
-          </PopupContent>
-        </Popup>
-      )}
+     
     </InputBox>
   );
 }
 
 const Img = styled.img`
-    width:56px; 
-    height: 67px;
-    position: absolute; 
-    right: 60px;
-`
+  width:56px; 
+  height: 67px;
+  position: absolute; /* 변경된 부분 */
+  right:0; /* 변경된 부분 */
+`;
 
 const InputBox = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 1vw; 
-  width: 92vw; 
+  padding: 1vw;
+  width: 92vw;
   max-width: 600px;
+  position: fixed; 
+  bottom: 0;
 `;
-
 const Input = styled.input`
   position: relative;
   width: 92vw; 
@@ -130,68 +113,3 @@ const Input = styled.input`
   padding: 0.5vw; 
   margin-bottom: 1vw; 
 `;
-
-const SendButton = styled.button`
-  width: 37vw; 
-  height: 54px;
-  border-radius: 4px;
-  background: var(--gray-100, #e1e1e1);
-`;
-
-//팝업창 전체
-const Popup = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40%; 
-`;
-
-
-const PopupContent = styled.div`
-  background: white;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-
-  input {
-    width: 50%; 
-    height: 12vw; 
-    border: none;
-    border-radius: 5px;
-    padding: 0.5vw; 
-    margin-bottom: 1vw; 
-    border: 1px solid #ccc;
-  }
-`;
-
-const Title = styled.div`
-  width: 100vw; 
-  flex-shrink: 0;
-  color: var(--black, #000);
-  font-family: HeadlandOne;
-  font-size: 2.8vw; 
-  font-style: normal;
-  font-weight: 400;
-  line-height: 140%;
-  padding: 1vw; 
-`;
-
-const NoteInput = styled.input`
-    width: 10vw; 
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 30px;
-  right: 5px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  background: none;
-  border: none;
-  color: #555; /* Adjust the color as needed */
-`;
-
