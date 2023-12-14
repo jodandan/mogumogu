@@ -165,40 +165,39 @@ export default function MainPage() {
         </Grid>
       </Grid>
 
-       {/* 게시글 목록 */}
-       <Grid container justifyContent="center">
-       <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
-  {posts.map((post) => (
-    <React.Fragment key={post.id}>
-      <Grid container justifyContent="space-between" alignItems="center">
+      {/* 게시글 목록 */}
+<Grid container justifyContent="center">
+  <List sx={{ textAlign: 'center', width: '80%', margin: '1rem', bgcolor: 'background.paper' }}>
+    {posts.map((post) => (
+      <React.Fragment key={post.id}>
         <ListItem
           alignItems="center"
           onClick={() => {
             navigate(`/postdetail/${encodeURIComponent(post.id)}`);
           }}
         >
-          <Grid container alignItems="center" spacing={2}>
+          <Grid container alignItems="center" justifyContent="space-between" style={{ margin: '20px' }}>
             <Grid item xs={12} sm={6}>
-              <div>
-                <div style={{ margin: '20px' }}>
-                  <ListItemText
-                    primary={
-                      <Typography variant="h5" style={{ fontSize: '1.5rem', textAlign: 'left' }}>
-                        {post.title}
-                      </Typography>
-                    }
-                  />
-                </div>
-              </div>
+              <ListItemText
+                primary={
+                  <Typography variant="h5" style={{ fontSize: '1.5rem' }}>
+                    {post.title}
+                  </Typography>
+                }
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} style={{ textAlign: 'right' }}>
+              <Typography variant="body5" style={{ fontSize: '20px', color: '#7C7C7C' }}>
+                {post.transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집 완료'}
+              </Typography>
             </Grid>
           </Grid>
         </ListItem>
-      </Grid>
-    </React.Fragment>
-  ))}
-</List>
+      </React.Fragment>
+    ))}
+  </List>
 </Grid>
-        
+
             
     </ThemeProvider>
   );
