@@ -9,6 +9,8 @@ import NoteListItem from './NoteListItem';
 import NoteDetailPage from './NoteDetailPage';
 import notesData from './data'; // snowflake import
 
+import { useNavigate } from 'react-router-dom';
+
 const itemsPerPage = 5;
 
 const Paging = () => {
@@ -53,18 +55,23 @@ const Paging = () => {
     fetchUserArticles();
   }, []);
 
+  const navigate = useNavigate();
+
   return (
     <div>
       <ul style={{ marginBottom: '10px' }}>
         <ListContainer>
-          {currentPosts.map((post) => (
-            // Use Link to navigate to the detail page
-            <Link to={`/note/${post.id}`} key={post.id}>
-              <ListItem onClick={() => handleNoteClick(post)}>
-                <ListTitle>{post.title}</ListTitle>
-              </ListItem>
-            </Link>
-          ))}
+        {currentPosts.map((post) => (
+        <ListItem key={post.id} onClick={() => handleNoteClick(post)}>
+          <ListTitle
+            onClick={() => {
+              navigate(`/note/${post.id}`);
+            }}
+          >
+            {post.title}
+          </ListTitle>
+        </ListItem>
+      ))}
         </ListContainer>
       </ul>
 
