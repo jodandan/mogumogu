@@ -11,11 +11,12 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
+import SendIcon from '@mui/icons-material/Send';
+import { InputAdornment, IconButton, Box, TextField} from '@mui/material';
 
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Plusbutton from '../../assets/Plusbutton.png'
 
-import InputComment from './InputComment';
 
 import dollar from '../../assets/dollar.png';
 import checkmark from '../../assets/checkmark.png';
@@ -110,7 +111,7 @@ const NoteDetailPage = ({ post }) => {
 
 
 
-
+<Grid container style={{ maxWidth: '100%', padding:"0 3rem"}}>
                 <PostBody>
                     <ul>
                         {detail.map((post) => (
@@ -144,8 +145,47 @@ const NoteDetailPage = ({ post }) => {
                             </Comment>
                         ))}
                     </ul>
-                    <InputComment />
+                    <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
+  <TextField
+    hiddenLabel
+    id="filled-hidden-label-normal"
+    placeholder="댓글을 입력하세요."
+    variant="filled"
+    multiline
+    fullWidth
+    size="small"
+   
+    
+    InputProps={{
+      style: {
+        height: '80px', // 텍스트 박스의 높이 조정
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      endAdornment: (
+        <InputAdornment position="end">
+          <IconButton >
+            <SendIcon />
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+    sx={{
+      '& .MuiFilledInput-root': {
+        backgroundColor: 'lightgray',
+        fontSize: '20px', // 텍스트 크기 조정
+        '&::placeholder': {
+          fontSize: '20px', // placeholder 크기 조정
+          textAlign: 'center', // placeholder 가운데 정렬
+          paddingTop: '5px', // placeholder 위쪽 여백 추가
+        },
+      },
+    }}
+  />
+</Box>
                 </PostBody>
+                </Grid>
             </div>
         </div>
     );
@@ -182,6 +222,8 @@ const Title = styled.div`
 const PostBody = styled.div`
     width: 100%;
     height: 100%; 
+    overflow-y: auto; /* 스크롤바를 추가하여 화면이 넘칠 때 스크롤할 수 있도록 함 */
+    padding-bottom: 100px; /* 인풋창이 가려지지 않도록 하기 위한 여유 공간 */
 `;
 
 const Comment = styled.div`
@@ -208,6 +250,31 @@ const Text = styled.div`
     flex-shrink: 0;
     padding: 5px 46px 20px 46px;
     width: 20vw;
+`;
+
+//인풋창
+
+
+
+const InputBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 1vw;
+  width: 92vw;
+  max-width: 600px;
+  position: fixed; 
+  bottom: 0;
+  
+`;
+const Input = styled.input`
+  position: relative;
+  width: 92vw; 
+  height: 60px;
+  border-radius: 15px;
+  background: #f3f1f1;
+  border: none;
+  padding: 0.5vw; 
+  margin-bottom: 1vw; 
 `;
 
 
