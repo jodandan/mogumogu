@@ -40,11 +40,46 @@ const NoteDetailPage = ({ post }) => {
         setPopupVisibility(true);
     };
 
-    const handlePopupOptionClick = (option) => {
+    const handlePopupOptionClick = async (option) => {
         console.log(`Selected option: ${option}`);
+
+        if (option === '입금 신청') {
+            axios.patch(`http://dana-seo.shop/api/article/deposit?articleId=${noteId}`)
+                .then(() => {
+                    alert("게시글 상태가 업데이트 됐습니다.");
+
+                    return axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                })
+                .then((response) => {
+                    setDetail(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error updating article status:', error);
+                });
+        }
+        else if (option === '거래 완료') {
+            try {
+                await axios.patch(`http://dana-seo.shop/api/article/transactionComplete?articleId=${noteId}`);
+                alert("게시글 상태가 '거래 완료'로 업데이트 되었습니다.");
+
+
+                const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                setDetail(updatedResponse.data);
+            } catch (error) {
+                console.error('Error updating article status:', error);
+            }
+        }
+
+        else if (option === '계좌 확인') {
+            // 가상의 계좌번호를 alert 창으로 보여줍니다.
+            alert('가상의 계좌번호: 123-456-789');
+        }
+
         // 팝업 닫기
         setPopupVisibility(false);
     };
+
+
 
     //내 쪽지함 조회 GET API
 
@@ -89,7 +124,7 @@ const NoteDetailPage = ({ post }) => {
                     <List>
                         {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
                             <ListItem key={text} disablePadding>
-                                <ListItemButton>
+                                <ListItemButton onClick={() => handlePopupOptionClick(text)}>
                                     <ListItemIcon>
                                         {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
                                         {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
@@ -100,15 +135,13 @@ const NoteDetailPage = ({ post }) => {
                             </ListItem>
                         ))}
                     </List>
-                    <List>
-                        <Text>진행 현황 : 거래 승인</Text>
-                    </List>
+                    <Text>진행 현황 : {detail.length > 0 && detail[0].transactionStatus}</Text>
                 </Drawer>
                 <PostBody>
                     <ul>
                         {detail.map((post) => (
                             <Comment key={post.id}>
-                                <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px'}}>
+                                <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
                                     <div>
                                         <p style={{
                                             color: '#EDB96A',
@@ -123,7 +156,7 @@ const NoteDetailPage = ({ post }) => {
                                     </div>
                                 </div>
                                 {post.messages.map((message) => (
-                                    <div key={message.id} style={{borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px'}}>
+                                    <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
                                         <p style={{
                                             color: '#338379',
                                             fontSize: '27px',
@@ -200,7 +233,7 @@ const Text = styled.div`
     height: 20px;
     flex-shrink: 0;
     padding: 5px 46px 20px 46px;
-    width: 20vw;
+    width: 20%;
 `;
 
 

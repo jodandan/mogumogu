@@ -5,15 +5,13 @@ import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 import './Pagination.css';
 import Pagination from 'react-js-pagination';
-import NoteListItem from './NoteListItem';
-import NoteDetailPage from './NoteDetailPage';
+
 import notesData from './data'; // snowflake import
 
-const itemsPerPage = 5;
 
 const Paging = () => {
   const [page, setPage] = useState(1);
-  const [selectedNote, setSelectedNote] = useState(null);
+
   const [note, setNote] = useState([]);
 
   const itemsPerPage = 5;
@@ -23,13 +21,14 @@ const Paging = () => {
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
   const currentPosts = note.slice(indexOfFirstPost, indexOfLastPost);
 
+  const totalPages = Math.ceil(note.length / itemsPerPage);
+
   const handlePageChange = (pageNumber) => {
-    setPage(pageNumber);
-    setSelectedNote(null); // Reset selected note when changing page
+    setCurrentPage(pageNumber);
   };
 
   const handleNoteClick = (post) => {
-    setSelectedNote(post);
+    setNote(post);
   };
 
   useEffect(() => {
@@ -69,21 +68,31 @@ const Paging = () => {
       </ul>
 
       {/* 페이징 컴포넌트 추가 */}
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={itemsPerPage}
-        totalItemsCount={notesData.length}
-        pageRangeDisplayed={5}
-        prevPageText="‹"
-        nextPageText="›"
-        onChange={handlePageChange}
-      />
+      {totalPages > 1 && (
+        <PaginationContainer>
+          <Pagination
+            activePage={currentPage}
+            itemsCountPerPage={itemsPerPage}
+            totalItemsCount={note.length}
+            pageRangeDisplayed={5}
+            prevPageText="‹"
+            nextPageText="›"
+            onChange={handlePageChange}
+          />
+        </PaginationContainer>
+      )}
     </div>
   );
 };
 
 export default Paging;
 
+
+const PaginationContainer = styled.div`
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+`;
 
 const ListContainer = styled.div`
     padding: 2rem;

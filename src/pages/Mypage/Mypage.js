@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg';
 
-import PostList from '../../components/MypagePagination/PostList';
-import postData from '../../components/MypagePagination/MypagepostData';
 import Header from './../../components/Header/Header';
 
 import Pagination from 'react-js-pagination';
@@ -33,6 +31,11 @@ export default function Mypage() {
         navigate('/mainpage');
     };
 
+    const handlePostClick = (postId) => {
+        // Redirect to the post page using the post id or any other identifier
+        navigate(`/postdetail/${postId}`); // Replace 'post' and 'id' with your actual route and identifier
+      };
+      
     useEffect(() => {
         const userIdFromLocalStorage = localStorage.getItem('userId');
 
@@ -96,7 +99,7 @@ export default function Mypage() {
                     <Text>내가쓴글</Text>
                     <ListContainer>
                         {currentPosts.map((post) => (
-                            <ListItem key={post.id}>
+                            <ListItem key={post.id} onClick={() => handlePostClick(post.id)}>
                                 <ListTitle>{post.title}</ListTitle>
                             </ListItem>
                         ))}
