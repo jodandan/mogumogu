@@ -10,9 +10,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import Typography from '@mui/material/Typography';
 
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
 import Plusbutton from '../../assets/Plusbutton.png'
@@ -22,6 +20,7 @@ import InputComment from './InputComment';
 import dollar from '../../assets/dollar.png';
 import checkmark from '../../assets/checkmark.png';
 import passbook from '../../assets/passbook.png';
+import { Grid } from '@mui/material';
 
 
 
@@ -84,26 +83,34 @@ const NoteDetailPage = ({ post }) => {
                         />
                     </PlusButtonBox>
                 </TitleBox>
-                <Drawer anchor="top" open={isPopupVisible} onClose={() => setPopupVisibility(false)}>
+                <Drawer anchor="top" open={isPopupVisible} onClose={() => setPopupVisibility(false)} style={{ margin: '2rem' }}> {/* margin 추가 */}
+  <List style={{  margin:"2rem 0", display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} disablePadding> {/* 방향과 정렬 변경 */}
+    {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
+      <ListItem key={text} button={false} style={{ borderBottom: 'none' }}>
+        <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <ListItemIcon>
+            {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+            {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+            {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
+          </ListItemIcon>
+          <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '1.2rem', fontWeight: 'bold' }}>{text}</Typography>} />
+        </ListItemButton>
+      </ListItem>
+    ))}
+    <ListItem button={false} style={{ borderBottom: 'none' }}>
+      <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+        <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem'}}>진행 현황 : 거래 승인</Typography>} />
+      </ListItemButton>
+    </ListItem>
+  </List>
+</Drawer>
 
-                    <List>
-                        {['입금 신청', '거래 완료', '계좌 확인'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index === 0 && <img src={dollar} alt='dollar' style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                        {index === 1 && <img src={checkmark} alt="Checkmark Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                        {index === 2 && <img src={passbook} alt="Passbook Icon" style={{ width: '3vw', height: '3vw', padding: '1vw' }} />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <List>
-                        <Text>진행 현황 : 거래 승인</Text>
-                    </List>
-                </Drawer>
+
+
+
+
+
+
                 <PostBody>
                     <ul>
                         {detail.map((post) => (
