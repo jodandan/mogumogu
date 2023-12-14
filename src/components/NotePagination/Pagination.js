@@ -24,7 +24,8 @@ const Paging = () => {
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
   const currentPosts = note.slice(indexOfFirstPost, indexOfLastPost);
-
+  const totalItemsCount = note.length;
+  
   const handlePageChange = (pageNumber) => {
     setPage(pageNumber);
     setSelectedNote(null); // Reset selected note when changing page
@@ -76,15 +77,15 @@ const Paging = () => {
       </ul>
 
       {/* 페이징 컴포넌트 추가 */}
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={itemsPerPage}
-        totalItemsCount={notesData.length}
-        pageRangeDisplayed={5}
-        prevPageText="‹"
-        nextPageText="›"
-        onChange={handlePageChange}
-      />
+          <Pagination
+      activePage={page}
+      itemsCountPerPage={itemsPerPage}
+      totalItemsCount={totalItemsCount}
+      pageRangeDisplayed={5}
+      prevPageText="‹"
+      nextPageText="›"
+      onChange={handlePageChange}
+    />
     </div>
   );
 };
