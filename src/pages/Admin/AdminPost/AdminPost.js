@@ -30,6 +30,7 @@ export default function AdminPost() {
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
 
       console.log(`Post with id ${postId} deleted successfully.`);
+      alert("게시글 삭제가 완료 되었습니다.")
     } catch (error) {
       console.error(`Error deleting post with id ${postId}:`, error);
     }

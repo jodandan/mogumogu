@@ -13,6 +13,9 @@ export default function AdminTransaction() {
     const [posts, setPosts] = useState([]); // 게시글 상태
     const [currentPage, setCurrentPage] = useState(1);
 
+
+    const [approvalStatus, setApprovalStatus] = useState({});
+
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
     const currentPosts = posts.slice(startIndex, endIndex);
@@ -38,6 +41,13 @@ export default function AdminTransaction() {
 
                 return newPosts;
             });
+
+            // Set approval status for the post
+            setApprovalStatus((prevStatus) => ({
+                ...prevStatus,
+                [articleId]: true,
+            }));
+
             alert('관리자가 거래를 승인하였습니다');
 
             const updatedResponse = await axios.get('http://dana-seo.shop/api/article/getAll');
@@ -51,21 +61,37 @@ export default function AdminTransaction() {
     //최종 거래 완료
     const handleCompletion = async (articleId) => {
         try {
+
+            // Check if approval is granted for this post
+            if (!approvalStatus[articleId]) {
+                alert('거래 승인을 먼저 진행해주세요.');
+                return;
+            }
+            // 최종 거래 완료 요청
             const response = await axios.patch(`http://dana-seo.shop/api/article/admin/final?articleId=${articleId}`);
 
             const updatedPost = response.data;
-
-            setPosts(prevPosts => {
-                const index = prevPosts.findIndex(post => post.id === updatedPost.id);
-                const newPosts = [...prevPosts];
-                newPosts[index] = updatedPost;
-
-                return newPosts;
-            });
-
             alert('관리자가 최종 거래를 승인하였습니다');
+            // alert 이후에 상태 업데이트
+            // Set approval status to false after completion
+            setApprovalStatus((prevStatus) => ({
+                ...prevStatus,
+                [articleId]: false,
+            }));
+
+            setTimeout(() => {
+                setPosts((prevPosts) => {
+                    const index = prevPosts.findIndex((post) => post.id === updatedPost.id);
+                    const newPosts = [...prevPosts];
+                    newPosts[index] = updatedPost;
+                    return newPosts;
+                });
+            }, 0);
+            const updatedResponse = await axios.get('http://dana-seo.shop/api/article/getAll');
+            setPosts(updatedResponse.data);
+
         } catch (error) {
-            console.error('Error sending message:', error);
+            console.error('Error completing transaction:', error);
         }
     };
 

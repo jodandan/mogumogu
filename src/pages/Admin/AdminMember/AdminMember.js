@@ -64,7 +64,7 @@ export default function AdminMember() {
       // Update memberData after successful deletion
       setMemberData((prevData) => prevData.filter((user) => user.id !== userId));
 
-
+      alert("회원 삭제가 완료되었습니다.")
       console.log(`User with id ${userId} deleted successfully`);
     } catch (error) {
       console.error('Error deleting user:', error);

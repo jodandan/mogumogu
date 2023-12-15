@@ -27,6 +27,7 @@ import { Grid } from '@mui/material';
 
 const NoteDetailPage = ({ post }) => {
     let { noteId } = useParams();
+    const [messageContent, setMessageContent] = useState('');
     const [detail, setDetail] = useState([]);
     const [isPopupVisible, setPopupVisibility] = useState(false);
     const navigate = useNavigate();
@@ -81,7 +82,38 @@ const NoteDetailPage = ({ post }) => {
 
 
 
-    //내 쪽지함 조회 GET API
+    const handleSendMessageClick = async () => {
+        const userIdFromLocalStorage = localStorage.getItem('userId');
+
+        if (!userIdFromLocalStorage) {
+            console.error('UserId not found in local storage');
+            return;
+        }
+
+        // 동적으로 receiver를 결정합니다.
+        const receiver = detail.length > 0 ? (detail[0].sender === userIdFromLocalStorage ? detail[0].userId : detail[0].sender) : '';
+
+        const messageData = {
+            articleId: noteId,
+            content: messageContent,
+            receiver: receiver,
+        };
+
+        try {
+            await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
+            setPopupVisibility(false);
+            alert('쪽지가 전송되었습니다.');
+            // 메시지 전송 후 바로 업데이트
+            const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+            setDetail(updatedResponse.data);
+
+            //메세지 창 비우기
+            setMessageContent('');
+
+        } catch (error) {
+            console.error('Error sending message:', error);
+        }
+    };
 
 
     //게시글 쪽지함 조회 GET API
@@ -99,6 +131,7 @@ const NoteDetailPage = ({ post }) => {
 
         fetchPosts();
     }, [noteId]);
+
 
 
     return (
@@ -135,8 +168,8 @@ const NoteDetailPage = ({ post }) => {
                         ))}
                         <ListItem button={false} style={{ borderBottom: 'none' }}>
                             <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황: 
-                                      {detail.length > 0 && detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감'}</Typography>} />
+                                <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황:
+                                    {detail.length > 0 && detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감'}</Typography>} />
                             </ListItemButton>
                         </ListItem>
                     </List>
@@ -155,7 +188,7 @@ const NoteDetailPage = ({ post }) => {
                                     <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
                                         <div>
                                             <p style={{
-                                                color: '#EDB96A',
+                                                color: post.userId === localStorage.getItem('userId') ? '#EDB96A' : '#338379',
                                                 fontSize: '27px',
                                                 fontStyle: 'normal',
                                                 fontWeight: '700',
@@ -169,7 +202,7 @@ const NoteDetailPage = ({ post }) => {
                                     {post.messages.map((message) => (
                                         <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
                                             <p style={{
-                                                color: '#338379',
+                                                color: post.userId === message.userId ? '#EDB96A' : '#338379',
                                                 fontSize: '27px',
                                                 fontStyle: 'normal',
                                                 fontWeight: '700',
@@ -190,8 +223,13 @@ const NoteDetailPage = ({ post }) => {
                                 multiline
                                 fullWidth
                                 size="small"
-
-
+                                value={messageContent}
+                                onChange={(e) => setMessageContent(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleSendMessageClick();
+                                    }
+                                }}
                                 InputProps={{
                                     style: {
                                         height: '80px', // 텍스트 박스의 높이 조정
@@ -201,7 +239,7 @@ const NoteDetailPage = ({ post }) => {
                                     },
                                     endAdornment: (
                                         <InputAdornment position="end">
-                                            <IconButton >
+                                            <IconButton onClick={handleSendMessageClick}>
                                                 <SendIcon />
                                             </IconButton>
                                         </InputAdornment>
