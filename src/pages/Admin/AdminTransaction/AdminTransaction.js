@@ -22,7 +22,7 @@ export default function AdminTransaction() {
     const handlePageChange = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-    
+
     //거래 승인
     const handleApproval = async (articleId) => {
         try {
@@ -62,7 +62,7 @@ export default function AdminTransaction() {
 
                 return newPosts;
             });
-    
+
             alert('관리자가 최종 거래를 승인하였습니다');
         } catch (error) {
             console.error('Error sending message:', error);
@@ -96,7 +96,12 @@ export default function AdminTransaction() {
                 <BoardItem key={post.id}>
                     <Number>{post.id}</Number>
                     <PostTitle>{post.title}</PostTitle>
-                    <PostSituation>{post.transactionStatus}</PostSituation>
+                    <PostSituation>
+                        {post.transactionStatus === 'RECRUITOPEN' && '모집중'}
+                        {post.transactionStatus === 'RECRUITCLOSED' && '모집마감'}
+                        {post.transactionStatus === 'COMPLETED' && '거래 승인'}
+                        {post.transactionStatus === 'FINAL' && '거래 완료'}
+                    </PostSituation>
                     <div style={{ marginLeft: '8rem' }}>
                         <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
                         <Button onClick={() => handleCompletion(post.id)}>거래 완료</Button>
