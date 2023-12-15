@@ -42,6 +42,11 @@ const CategotyBox = styled.div`
   display: flex;
   flex-direction: row;
   gap: 8rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `;
 
 const Menu = styled.div`
