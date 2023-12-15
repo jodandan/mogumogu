@@ -46,7 +46,7 @@ const NoteDetailPage = ({ post }) => {
         if (option === '입금 신청') {
             axios.patch(`http://dana-seo.shop/api/article/deposit?articleId=${noteId}`)
                 .then(() => {
-                    alert("게시글 상태가 업데이트 됐습니다.");
+                    alert("입금이 완료되었습니다.");
 
                     return axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
                 })
@@ -60,7 +60,7 @@ const NoteDetailPage = ({ post }) => {
         else if (option === '거래 완료') {
             try {
                 await axios.patch(`http://dana-seo.shop/api/article/transactionComplete?articleId=${noteId}`);
-                alert("게시글 상태가 '거래 완료'로 업데이트 되었습니다.");
+                alert("확인되었습니다.");
 
 
                 const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
@@ -135,8 +135,8 @@ const NoteDetailPage = ({ post }) => {
                         ))}
                         <ListItem button={false} style={{ borderBottom: 'none' }}>
                             <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황 
-                                    {detail.length > 0 && detail[0].transactionStatus}</Typography>} />
+                                <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황: 
+                                      {detail.length > 0 && detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감'}</Typography>} />
                             </ListItemButton>
                         </ListItem>
                     </List>

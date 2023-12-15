@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, useLocation } from 'react-router-dom';
-import Header from './../Header/Header';
+import AdminHeader from './AdminHeader';
 export default function Category() {
   const location = useLocation();
 
   return (
     <div>
-      <Header />
+      <AdminHeader />
       {/* 카테고리 박스 */}
       <CategotyBox>
         {getMenu('/adminpost', '게시물 관리', location.pathname)}

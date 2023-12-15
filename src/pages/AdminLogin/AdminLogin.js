@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as BackbuttonIcon } from '../../assets/Backbutton_icon.svg'
-import Header from './../../components/Header/Header';
+import AdminHeader from './../../components/AdminCategory/AdminHeader';
 
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -50,7 +50,7 @@ export default function Admin() {
 
   return (
     <>
-      <Header />
+      <AdminHeader />
       <ThemeProvider theme={defaultTheme}>
         <div style={{ padding: '2rem' }}>
           <BackbuttonIcon onClick={handleBackButtonClick} />
