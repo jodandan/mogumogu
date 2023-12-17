@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Pagination.css';
 import Pagination from 'react-js-pagination';
@@ -21,7 +21,7 @@ const Paging = () => {
 
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
-  const currentPosts = note.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = Array.isArray(note) ? note.slice(indexOfFirstPost, indexOfLastPost) : [];
 
   const totalPages = Math.ceil(note.length / itemsPerPage);
 
@@ -59,17 +59,18 @@ const Paging = () => {
     <div>
       <ul style={{ marginBottom: '10px' }}>
         <ListContainer>
-        {currentPosts.map((post) => (
-        <ListItem key={post.id} onClick={() => handleNoteClick(post)}>
-          <ListTitle
-            onClick={() => {
-              navigate(`/note/${post.id}`);
-            }}
-          >
-            {post.title}
-          </ListTitle>
-        </ListItem>
-      ))}
+          {currentPosts.map((post) => (
+            <ListItem key={post.id} >
+              <ListTitle
+                onClick={() => {
+                  handleNoteClick(post);
+                  navigate(`/note/${post.id}`);
+                }}
+              >
+                {post.title}
+              </ListTitle>
+            </ListItem>
+          ))}
         </ListContainer>
       </ul>
 
