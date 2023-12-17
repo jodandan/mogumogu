@@ -182,7 +182,7 @@ const NoteDetailPage = ({ post }) => {
 
                 <Grid container style={{ maxWidth: '100%', padding: "0 3rem" }}>
                     <PostBody>
-                        <ul>
+                        {/* <ul>
                             {detail.map((post) => (
                                 <Comment key={post.id}>
                                     <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
@@ -213,13 +213,13 @@ const NoteDetailPage = ({ post }) => {
                                     ))}
                                 </Comment>
                             ))}
-                        </ul>
+                        </ul> */}
                         <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
                             <TextField
+                            style={{backgroundColor:"#EAEAEA",}}
                                 hiddenLabel
                                 id="filled-hidden-label-normal"
                                 placeholder="댓글을 입력하세요."
-                                variant="filled"
                                 multiline
                                 fullWidth
                                 size="small"
@@ -253,6 +253,7 @@ const NoteDetailPage = ({ post }) => {
                                             fontSize: '20px', // placeholder 크기 조정
                                             textAlign: 'center', // placeholder 가운데 정렬
                                             paddingTop: '5px', // placeholder 위쪽 여백 추가
+                                            
                                         },
                                     },
                                 }}
