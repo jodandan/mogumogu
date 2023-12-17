@@ -17,7 +17,7 @@ import axios from "axios";
 
 const defaultTheme = createTheme();
 
-export default function Admin() {
+export default function AdminLogin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -31,8 +31,8 @@ export default function Admin() {
     
     try {
       const response = await axios.post('http://dana-seo.shop/api/user/login', {
-        username: 'admin_0@gmail.com',
-        password: 'pwd', 
+        username: id,
+        password: password,
       });
 
       //관리자토큰 가져오기
