@@ -38,7 +38,7 @@ export default function Mypage() {
       
     useEffect(() => {
         const userIdFromLocalStorage = localStorage.getItem('userId');
-
+       
         if (!userIdFromLocalStorage) {
             console.error('UserId not found in local storage');
             return;
@@ -68,8 +68,10 @@ export default function Mypage() {
         const fetchUsernickName = async () => {
             try {
                 const response = await axios.get(`http://dana-seo.shop/api/user/get?userId=${userIdFromLocalStorage}`);
-                setNickname(response.data.nickName);  // Access nickName property from the response.data
-                setUsername(response.data.username);  // Access username property from the response.data
+                setNickname(response.data.nickName);  
+                setUsername(response.data.username);  
+                localStorage.setItem('nickName', response.data.nickName); //닉네임 로컬 스토리지 저장
+                
             } catch (error) {
                 console.error('Error fetching user info:', error);
             }

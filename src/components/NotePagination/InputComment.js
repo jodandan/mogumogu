@@ -90,8 +90,8 @@ export default function InputComment() {
 const Img = styled.img`
   width:56px; 
   height: 67px;
-  position: absolute; /* 변경된 부분 */
-  right:0; /* 변경된 부분 */
+  position: absolute;
+  right:0; 
 `;
 
 const InputBox = styled.div`

@@ -31,7 +31,7 @@ const NoteDetailPage = ({ post }) => {
     const [detail, setDetail] = useState([]);
     const [isPopupVisible, setPopupVisibility] = useState(false);
     const navigate = useNavigate();
-
+    
 
     const handleBackButtonClick = () => {
         navigate('/note');
@@ -80,6 +80,23 @@ const NoteDetailPage = ({ post }) => {
         setPopupVisibility(false);
     };
 
+   //게시글 쪽지함 조회 GET API
+   useEffect(() => {
+    const fetchPosts = async () => {
+        const userId = localStorage.getItem('userId');
+        console.log(userId)
+        try {
+            const response = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}&userId=${userId}`);
+            console.log(response.data);
+            setDetail(response.data);
+
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    fetchPosts();
+}, [noteId]);
 
 
     const handleSendMessageClick = async () => {
@@ -91,24 +108,25 @@ const NoteDetailPage = ({ post }) => {
         }
 
         // 동적으로 receiver를 결정합니다.
-        const receiver = detail.length > 0 ? (detail[0].sender === userIdFromLocalStorage ? detail[0].userId : detail[0].sender) : '';
+        // const receiver = detail.length > 0 ? (detail[0].sender === userIdFromLocalStorage ? detail[0].userId : detail[0].sender) : '';
+        const receiver = detail[0].sender;
+
 
         const messageData = {
             articleId: noteId,
             content: messageContent,
             receiver: receiver,
         };
-
+      
+        console.log("receiver", receiver);
         try {
             await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
             setPopupVisibility(false);
             alert('쪽지가 전송되었습니다.');
-            // 메시지 전송 후 바로 업데이트
-            const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
-            setDetail(updatedResponse.data);
+           
+       // 페이지 새로 고침
+    window.location.reload();
 
-            //메세지 창 비우기
-            setMessageContent('');
 
         } catch (error) {
             console.error('Error sending message:', error);
@@ -116,22 +134,7 @@ const NoteDetailPage = ({ post }) => {
     };
 
 
-    //게시글 쪽지함 조회 GET API
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const response = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
-                console.log(response.data);
-                setDetail(response.data);
-
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchPosts();
-    }, [noteId]);
-
+    
 
 
     return (
@@ -182,44 +185,83 @@ const NoteDetailPage = ({ post }) => {
 
                 <Grid container style={{ maxWidth: '100%', padding: "0 3rem" }}>
                     <PostBody>
-                        {/* <ul>
-                            {detail.map((post) => (
-                                <Comment key={post.id}>
-                                    <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-                                        <div>
-                                            <p style={{
-                                                color: post.userId === localStorage.getItem('userId') ? '#EDB96A' : '#338379',
-                                                fontSize: '27px',
-                                                fontStyle: 'normal',
-                                                fontWeight: '700',
-                                                lineHeight: 'normal',
-                                            }}>{post.nickName}</p>
-                                        </div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <p>{post.content}</p>
-                                        </div>
-                                    </div>
-                                    {post.messages.map((message) => (
-                                        <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-                                            <p style={{
-                                                color: post.userId === message.userId ? '#EDB96A' : '#338379',
-                                                fontSize: '27px',
-                                                fontStyle: 'normal',
-                                                fontWeight: '700',
-                                                lineHeight: 'normal',
-                                            }}>{message.sender}</p>
-                                            <p>{message.content}</p>
-                                        </div>
-                                    ))}
-                                </Comment>
-                            ))}
-                        </ul> */}
+                    {/* <ul>
+  {detail.length > 0 && detail.map((post) => (
+    <Comment key={post.id}>
+      
+      <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
+        <div>
+          <p style={{
+            color: post.userId === localStorage.getItem('userId') ? '#EDB96A' : '#338379',
+            fontSize: '27px',
+            fontStyle: 'normal',
+            fontWeight: '700',
+            lineHeight: 'normal',
+          }}>{post.sender}</p>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <p>{post.content}</p>
+        </div>
+      </div>
+
+    
+{post.messages && post.messages.map((message) => {
+  
+
+  return (
+    <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
+      <p style={{
+        color: localStorage.getItem('userId') === message.senderId ? '#EDB96A' : '#338379',
+        fontSize: '27px',
+        fontStyle: 'normal',
+        fontWeight: '700',
+        lineHeight: 'normal',
+      }}>{message.sender}</p>
+      <p>{message.content}</p>
+    </div>
+  );
+})}
+
+    </Comment>
+  ))}
+</ul> */}
+<ul>
+  {detail.length > 0 && detail.map((post) => {
+    const userIdFromLocalStorage = localStorage.getItem('userId');
+    const userIdFromPost = post.userId;
+    // console.log("post.userId:", userIdFromPost);
+    // console.log("localStorage userId:", userIdFromLocalStorage);
+
+    return (
+      <Comment key={post.id}>
+        <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
+          <div>
+            <p style={{
+              color: parseInt(userIdFromLocalStorage) === parseInt(userIdFromPost) ? '#EDB96A' : '#338379',
+              fontSize: '27px',
+              fontStyle: 'normal',
+              fontWeight: '700',
+              lineHeight: 'normal',
+            }}>{post.sender}</p>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <p>{post.content}</p>
+          </div>
+        </div>
+      </Comment>
+    );
+  })}
+</ul>
+
+
+
+
                         <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
                             <TextField
                             style={{backgroundColor:"#EAEAEA",}}
                                 hiddenLabel
                                 id="filled-hidden-label-normal"
-                                placeholder="댓글을 입력하세요."
+                                placeholder="내용을 입력하세요."
                                 multiline
                                 fullWidth
                                 size="small"
