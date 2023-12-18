@@ -21,7 +21,7 @@ const Paging = () => {
 
   const indexOfLastPost = currentPage * itemsPerPage;
   const indexOfFirstPost = indexOfLastPost - itemsPerPage;
-  const currentPosts = Array.isArray(note) ? note.slice(indexOfFirstPost, indexOfLastPost) : [];
+  const currentPosts = note.slice(indexOfFirstPost, indexOfLastPost);
 
   const totalPages = Math.ceil(note.length / itemsPerPage);
 

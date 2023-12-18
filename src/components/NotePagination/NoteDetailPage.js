@@ -27,11 +27,12 @@ import { Grid } from '@mui/material';
 
 const NoteDetailPage = ({ post }) => {
     let { noteId } = useParams();
+    const [status, setStatus] = useState([]);
     const [messageContent, setMessageContent] = useState('');
     const [detail, setDetail] = useState([]);
     const [isPopupVisible, setPopupVisibility] = useState(false);
     const navigate = useNavigate();
-    
+
 
     const handleBackButtonClick = () => {
         navigate('/note');
@@ -60,12 +61,19 @@ const NoteDetailPage = ({ post }) => {
         }
         else if (option === '거래 완료') {
             try {
-                await axios.patch(`http://dana-seo.shop/api/article/transactionComplete?articleId=${noteId}`);
-                alert("확인되었습니다.");
+                if (status && status.length > 0 && status[0].transactionStatus === 'RECRUITCLOSED' || 'COMPLETED' || 'FINAL') {
+                    await axios.patch(`http://dana-seo.shop/api/article/transactionComplete?articleId=${noteId}`);
+                    alert("확인되었습니다.");
 
 
-                const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
-                setDetail(updatedResponse.data);
+                    const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                    setDetail(updatedResponse.data);
+
+                    // 팝업 닫기
+                    setPopupVisibility(false);
+                } else {
+                    alert("입금 신청을 먼저 완료하세요.");
+                }
             } catch (error) {
                 console.error('Error updating article status:', error);
             }
@@ -80,23 +88,39 @@ const NoteDetailPage = ({ post }) => {
         setPopupVisibility(false);
     };
 
-   //게시글 쪽지함 조회 GET API
-   useEffect(() => {
-    const fetchPosts = async () => {
-        const userId = localStorage.getItem('userId');
-        console.log(userId)
-        try {
-            const response = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}&userId=${userId}`);
-            console.log(response.data);
-            setDetail(response.data);
+    //게시글 쪽지함 조회 GET API
+    useEffect(() => {
+        const fetchPosts = async () => {
+            const userId = localStorage.getItem('userId');
+            console.log(userId)
+            try {
+                const response = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}&userId=${userId}`);
+                console.log(response.data);
+                setDetail(response.data);
 
-        } catch (error) {
-            console.error(error);
-        }
-    };
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    fetchPosts();
-}, [noteId]);
+        fetchPosts();
+    }, [noteId]);
+
+    //게시글 전체 조회 API
+    useEffect(() => {
+        const fetchArticle = async () => {
+            try {
+                const response2 = await axios.get(`http://dana-seo.shop/api/article/getAll`);
+                setStatus(response2.data);
+                console.log(response2.data);
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchArticle();
+    }, []);
 
 
     const handleSendMessageClick = async () => {
@@ -117,15 +141,15 @@ const NoteDetailPage = ({ post }) => {
             content: messageContent,
             receiver: receiver,
         };
-      
+
         console.log("receiver", receiver);
         try {
             await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
             setPopupVisibility(false);
             alert('쪽지가 전송되었습니다.');
-           
-       // 페이지 새로 고침
-    window.location.reload();
+
+            // 페이지 새로 고침
+            window.location.reload();
 
 
         } catch (error) {
@@ -134,7 +158,7 @@ const NoteDetailPage = ({ post }) => {
     };
 
 
-    
+
 
 
     return (
@@ -172,7 +196,7 @@ const NoteDetailPage = ({ post }) => {
                         <ListItem button={false} style={{ borderBottom: 'none' }}>
                             <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황:
-                                    {detail.length > 0 && detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감'}</Typography>} />
+                                    {status.transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감'}</Typography>} />
                             </ListItemButton>
                         </ListItem>
                     </List>
@@ -185,7 +209,7 @@ const NoteDetailPage = ({ post }) => {
 
                 <Grid container style={{ maxWidth: '100%', padding: "0 3rem" }}>
                     <PostBody>
-                    {/* <ul>
+                        {/* <ul>
   {detail.length > 0 && detail.map((post) => (
     <Comment key={post.id}>
       
@@ -225,40 +249,40 @@ const NoteDetailPage = ({ post }) => {
     </Comment>
   ))}
 </ul> */}
-<ul>
-  {detail.length > 0 && detail.map((post) => {
-    const userIdFromLocalStorage = localStorage.getItem('userId');
-    const userIdFromPost = post.userId;
-    // console.log("post.userId:", userIdFromPost);
-    // console.log("localStorage userId:", userIdFromLocalStorage);
+                        <ul>
+                            {detail.length > 0 && detail.map((post) => {
+                                const userIdFromLocalStorage = localStorage.getItem('userId');
+                                const userIdFromPost = post.userId;
+                                // console.log("post.userId:", userIdFromPost);
+                                // console.log("localStorage userId:", userIdFromLocalStorage);
 
-    return (
-      <Comment key={post.id}>
-        <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-          <div>
-            <p style={{
-              color: parseInt(userIdFromLocalStorage) === parseInt(userIdFromPost) ? '#EDB96A' : '#338379',
-              fontSize: '27px',
-              fontStyle: 'normal',
-              fontWeight: '700',
-              lineHeight: 'normal',
-            }}>{post.sender}</p>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p>{post.content}</p>
-          </div>
-        </div>
-      </Comment>
-    );
-  })}
-</ul>
+                                return (
+                                    <Comment key={post.id}>
+                                        <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
+                                            <div>
+                                                <p style={{
+                                                    color: parseInt(userIdFromLocalStorage) === parseInt(userIdFromPost) ? '#EDB96A' : '#338379',
+                                                    fontSize: '27px',
+                                                    fontStyle: 'normal',
+                                                    fontWeight: '700',
+                                                    lineHeight: 'normal',
+                                                }}>{post.sender}</p>
+                                            </div>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                <p>{post.content}</p>
+                                            </div>
+                                        </div>
+                                    </Comment>
+                                );
+                            })}
+                        </ul>
 
 
 
 
                         <Box sx={{ position: 'fixed', bottom: 10, width: 'calc(100% - 200px)', height: 'auto', marginLeft: 'auto', marginRight: 'auto', left: 0, right: 0 }}>
                             <TextField
-                            style={{backgroundColor:"#EAEAEA",}}
+                                style={{ backgroundColor: "#EAEAEA", }}
                                 hiddenLabel
                                 id="filled-hidden-label-normal"
                                 placeholder="내용을 입력하세요."
@@ -295,7 +319,7 @@ const NoteDetailPage = ({ post }) => {
                                             fontSize: '20px', // placeholder 크기 조정
                                             textAlign: 'center', // placeholder 가운데 정렬
                                             paddingTop: '5px', // placeholder 위쪽 여백 추가
-                                            
+
                                         },
                                     },
                                 }}

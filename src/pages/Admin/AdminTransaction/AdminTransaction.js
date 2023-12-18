@@ -125,8 +125,9 @@ export default function AdminTransaction() {
                     <PostSituation>
                         {post.transactionStatus === 'RECRUITOPEN' && '모집중'}
                         {post.transactionStatus === 'RECRUITCLOSED' && '모집마감'}
-                        {post.transactionStatus === 'COMPLETED' && '거래 승인'}
-                        {post.transactionStatus === 'FINAL' && '거래 완료'}
+                        {post.transactionStatus === 'APPROVED' && '거래 승인'}
+                        {post.transactionStatus === 'COMPLETED' && '거래 완료'}
+                        {post.transactionStatus === 'FINAL' && '거래최종완료'}
                     </PostSituation>
                     <div style={{ marginLeft: '8rem' }}>
                         <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
@@ -221,7 +222,7 @@ const PostTitle = styled(Number)`
 
 const PostSituation = styled(Number)`
     margin-left: 6rem;
-    width: 10%; 
+    width: 11%; 
 `;
 //==============================================================
 
