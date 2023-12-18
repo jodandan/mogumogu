@@ -21,18 +21,25 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
-
+  const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
   
   const handleSignUp = (event) => {
     event.preventDefault();
+  
+    // 이메일 도메인 제한
+    if (!email.endsWith('@gachon.ac.kr')) {
+      setErrorMessage('가천대 이메일을 사용해주세요.');
+      return;
+    }
+  
     const data = {
       username: email,
       password: password,
       nickName: nickname
     };
-    
+  
     const userEmail = email; 
 
 
@@ -76,6 +83,7 @@ export default function SignUp() {
           <Typography component="h1"  variant="h4" style={{ fontWeight: 'bold' }}>
             Sign up
           </Typography>
+          
           <Box component="form" noValidate onSubmit={handleSignUp} sx={{ mt: 3 }}>
             <Grid container marginTop="1.5rem" spacing={2}>
             <Grid item xs={12}>
@@ -84,21 +92,31 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="이메일을 입력해주세요."
                   name="email"
                   autoComplete="email"
-                  helperText="가천대 이메일을 통해 회원가입해주세요."
+                  helperText={
+                    <Typography
+                      variant="body2"
+                      style={{ color: errorMessage ? 'red' : 'inherit' }}
+                    >
+                      가천대 이메일을 통해 회원가입해주세요.
+                    </Typography>
+                  }
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  // 이메일 도메인 제한
+                inputProps={{ pattern: "[a-zA-Z0-9._%+-]+@gachon\\.ac\\.kr$", title: "가천대 이메일을 사용해주세요." }}
+                
                 />
+                
               </Grid>
+              
               <Grid item xs={12} >
                 닉네임
                 <TextField
                   required
                   fullWidth
                   id="nickname"
-                  label="닉네임을 입력해주세요."
                   name="nickname"
                   autoComplete="nickname" 
                   value={nickname}
@@ -113,7 +131,6 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="비밀번호를 입력해주세요."
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -121,8 +138,9 @@ export default function SignUp() {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Grid>
+              
               <Grid item xs={12}>
-                
+              
               </Grid>
             </Grid>
             <Button

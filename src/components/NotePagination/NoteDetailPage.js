@@ -131,28 +131,28 @@ const NoteDetailPage = ({ post }) => {
             return;
         }
 
-        // 로컬 스토리지에서 닉네임 가져오기
-const nicknameFromLocalStorage = localStorage.getItem('nickname');
+                    // 로컬 스토리지에서 닉네임 가져오기
+            const nicknameFromLocalStorage = localStorage.getItem('nickname');
 
-// receiver 변수 초기화
-let receiver = '';
+            // receiver 변수 초기화
+            let receiver = '';
 
-// detail 배열의 길이가 0보다 큰 경우에만 처리
-if (detail.length > 0) {
-  // detail 배열의 첫 번째 요소부터 비교 시작
-  let index = 0;
-  while (index < detail.length) {
-    // detail 배열의 sender와 로컬 스토리지의 닉네임 비교
-    if (detail[index].receiver === nicknameFromLocalStorage) {
-      // sender가 같은 경우, 다음 요소로 이동하여 다시 비교
-      index++;
-    } else {
-      // sender가 다른 경우, 해당 sender를 receiver로 정의하고 반복문 종료
-      receiver = detail[index].receiver;
-      break;
-    }
-  }
-}
+            // detail 배열의 길이가 0보다 큰 경우에만 처리
+            if (detail.length > 0) {
+            // detail 배열의 첫 번째 요소부터 비교 시작
+            let index = 0;
+            while (index < detail.length) {
+                // detail 배열의 sender와 로컬 스토리지의 닉네임 비교
+                if (detail[index].receiver === nicknameFromLocalStorage) {
+                // sender가 같은 경우, 다음 요소로 이동하여 다시 비교
+                index++;
+                } else {
+                // sender가 다른 경우, 해당 sender를 receiver로 정의하고 반복문 종료
+                receiver = detail[index].receiver;
+                break;
+                }
+            }
+            }
 
 
         const messageData = {
