@@ -64,10 +64,10 @@ const Paging = () => {
               <ListTitle
                 onClick={() => {
                   handleNoteClick(post);
-                  navigate(`/note/${post.id}`);
+                  navigate(`/note/${post.articleId}`);
                 }}
               >
-                {post.title}
+                {post.articleTitle}
               </ListTitle>
             </ListItem>
           ))}
