@@ -23,7 +23,23 @@ import checkmark from '../../assets/checkmark.png';
 import passbook from '../../assets/passbook.png';
 import { Grid } from '@mui/material';
 
-
+const getTransactionStatusText = (status) => {
+    switch (status) {
+      case 'RECRUITOPEN':
+        return '모집중';
+      case 'RECRUITCLOSED':
+        return '모집마감';
+      case 'APPROVED':
+        return '거래 승인';
+      case 'COMPLETED':
+        return '거래 완료';
+      case 'FINAL':
+        return '거래최종완료';
+      default:
+        return '';
+    }
+  };
+  
 
 const NoteDetailPage = ({ post }) => {
     let { noteId } = useParams();
@@ -196,14 +212,11 @@ const NoteDetailPage = ({ post }) => {
                         <ListItem button={false} style={{ borderBottom: 'none' }}>
                             <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 {/* 거래 진행 현황 */}
-                                <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황:
-                                {detail.transactionStatus === 'RECRUITOPEN' && '모집중'}
-                                {detail.transactionStatus === 'RECRUITCLOSED' && '모집마감'}
-                                {detail.transactionStatus === 'APPROVED' && '거래 승인'}
-                                {detail.transactionStatus === 'COMPLETED' && '거래 완료'}
-                                {detail.transactionStatus === 'FINAL' && '거래최종완료'}
-
-                                {detail.length > 0 ? (detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감') : ''}</Typography>} />
+                                <ListItemText primary={
+  <Typography style={{ textAlign: 'center', fontSize: '2rem' }}>
+    진행 현황: {detail.length > 0 && getTransactionStatusText(detail[0].transactionStatus)}
+  </Typography>
+} />
                             </ListItemButton>
                         </ListItem>
                     </List>
