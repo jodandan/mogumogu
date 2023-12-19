@@ -42,7 +42,6 @@ export default function AdminTransaction() {
                 return newPosts;
             });
 
-            // Set approval status for the post
             setApprovalStatus((prevStatus) => ({
                 ...prevStatus,
                 [articleId]: true,
@@ -64,7 +63,6 @@ export default function AdminTransaction() {
 
             const post = posts.find((post) => post.id === articleId);
 
-            // Check if approval is granted for this post
             if (post.transactionStatus !== 'APPROVED') {
                 alert('거래 승인을 먼저 진행해주세요.');
                 return;
@@ -75,7 +73,6 @@ export default function AdminTransaction() {
             const updatedPost = response.data;
             alert('관리자가 최종 거래를 승인하였습니다');
             // alert 이후에 상태 업데이트
-            // Set approval status to false after completion
             setApprovalStatus((prevStatus) => ({
                 ...prevStatus,
                 [articleId]: false,
