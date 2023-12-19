@@ -11,15 +11,15 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-// import modangBack from "../../../assets/modangBack.png";
 import axios from "axios";
 
 
 const defaultTheme = createTheme();
 
-export default function Admin() {
+export default function AdminLogin() {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleBackButtonClick = () => {
@@ -28,11 +28,11 @@ export default function Admin() {
 
   const handleSignUp = async (event) => {
     event.preventDefault();
-    
+
     try {
-      const response = await axios.post('http://dana-seo.shop/api/user/login', {
-        username: 'admin_0@gmail.com',
-        password: 'pwd', 
+      const response = await axios.post('http://dana-seo.shop:8080/api/user/login', {
+        username: id,
+        password: password,
       });
 
       //관리자토큰 가져오기
@@ -44,6 +44,7 @@ export default function Admin() {
       //관리자페이지이동
       navigate('/adminpost');
     } catch (error) {
+      setErrorMessage('아이디 또는 비밀번호를 다시 확인해주세요.');
       console.error('Error logging in:', error);
     }
   };
@@ -100,9 +101,13 @@ export default function Admin() {
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12}>
-
-                </Grid>
+                {errorMessage && (
+                  <Box marginTop="1rem" display="flex" justifyContent="center" marginBottom="1rem" marginLeft="4rem">
+                    <Typography color="error" align="center">
+                      {errorMessage}
+                    </Typography>
+                  </Box>
+                )}
               </Grid>
               <Button
                 type="submit"
@@ -124,3 +129,4 @@ export default function Admin() {
 }
 
 
+//test

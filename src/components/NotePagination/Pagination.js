@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Pagination.css';
 import Pagination from 'react-js-pagination';
@@ -35,41 +35,60 @@ const Paging = () => {
 
   useEffect(() => {
     const userIdFromLocalStorage = localStorage.getItem('userId');
-
+  
     if (!userIdFromLocalStorage) {
       console.error('UserId not found in local storage');
       return;
     }
-
+  
     const fetchUserArticles = async () => {
       try {
-        const response = await axios.get(`http://dana-seo.shop/api/message/getMessageStorage?userId=${userIdFromLocalStorage}`);
-        setNote(response.data);
-        console.log(response.data);
+        const response = await axios.get(`http://dana-seo.shop:8080/api/message/getMessageStorage?userId=${userIdFromLocalStorage}`);
+        const articles = response.data;
+  
+        // 중복된 articleTitle을 제거한 배열 생성
+        const uniqueArticles = [];
+        const uniqueTitlesSet = new Set();
+  
+        articles.forEach(article => {
+          if (!uniqueTitlesSet.has(article.articleTitle)) {
+            uniqueTitlesSet.add(article.articleTitle);
+            uniqueArticles.push({
+              articleTitle: article.articleTitle,
+              articleId: article.articleId
+            });
+          }
+        });
+  
+        setNote(uniqueArticles);
+        console.log(uniqueArticles);
       } catch (error) {
         console.error('Error fetching user articles:', error);
       }
     };
-
+  
     fetchUserArticles();
   }, []);
+    
+  
 
 
   return (
     <div>
       <ul style={{ marginBottom: '10px' }}>
         <ListContainer>
-        {currentPosts.map((post) => (
-        <ListItem key={post.id} onClick={() => handleNoteClick(post)}>
-          <ListTitle
-            onClick={() => {
-              navigate(`/note/${post.id}`);
-            }}
-          >
-            {post.title}
-          </ListTitle>
-        </ListItem>
-      ))}
+          {currentPosts.map((post) => (
+            <ListItem key={post.id} >
+              <ListTitle
+                onClick={() => {
+                  handleNoteClick(post);
+                  navigate(`/note/${post.articleId}`);
+                }}
+              >
+                {post.articleTitle}
+              </ListTitle>
+            </ListItem>
+          ))}
         </ListContainer>
       </ul>
 

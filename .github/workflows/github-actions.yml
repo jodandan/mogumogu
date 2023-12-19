@@ -2,7 +2,6 @@ name: mogumogu front 'action' CI/CD
 on:
   pull_request:
     types: [closed]
-    workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -37,5 +36,5 @@ jobs:
           script: |
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker rm -f react
-            docker run -p 3000:80 --name react ${{ secrets.DOCKER_USERNAME }}/react:latest
+            docker run -p 3000:3000 --name react ${{ secrets.DOCKER_USERNAME }}/react:latest
             docker image prune -af

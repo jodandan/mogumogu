@@ -93,7 +93,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://dana-seo.shop/api/article/get',
+        const response = await axios.get('http://dana-seo.shop:8080/api/article/get',
           {
             params: {
               articleId: postId,
@@ -114,7 +114,7 @@ export default function PostDetail() {
   const deleteArticle = async () => {
     try {
 
-      await axios.delete('http://dana-seo.shop/api/article/delete', {
+      await axios.delete('http://dana-seo.shop:8080/api/article/delete', {
         params: {
           articleId: postId
         }
@@ -143,7 +143,7 @@ export default function PostDetail() {
     };
   
     try {
-      await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
+      await axios.post(`http://dana-seo.shop:8080/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
       setPopupVisible(false);
       alert('쪽지가 전송되었습니다.');
     } catch (error) {
@@ -155,7 +155,7 @@ export default function PostDetail() {
   const createArticleComplain = async () => {
     try {
       const response = await axios.patch(
-        'http://dana-seo.shop/api/article/addComplain',
+        'http://dana-seo.shop:8080/api/article/addComplain',
         null,
         {
           params: {
@@ -245,17 +245,18 @@ export default function PostDetail() {
           <Grid container justifyContent="center" marginTop="7rem">
             <Grid item>
 
-              <Button
-                variant="contained"
-                sx={{
-                  fontSize: '18px',
-                  width: '200px',
-                  height: '60px',
-                }}
-                onClick={handleButtonClick}
-                disabled={detail.transactionStatus !== 'RECRUITOPEN'} //// 모집중이 아닐 때 비활성화
-              >쪽지 보내기
-              </Button>
+            <Button
+              variant="contained"
+              sx={{
+                fontSize: '18px',
+                width: '200px',
+                height: '60px',
+              }}
+              onClick={handleButtonClick}
+              // 모집 마감 & 로컬 스토리지의 userId와 detail.userId가 같을 때 비활성화
+              disabled={detail.transactionStatus !== 'RECRUITOPEN' || Number(localStorage.getItem('userId')) === detail.userId}
+            >쪽지 보내기
+            </Button>
               {isPopupVisible && (
                 <StyledPopup container>
                   <StyledPopupContent container direction="column" spacing={2}>

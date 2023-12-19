@@ -40,17 +40,12 @@ const CategotyBox = styled.div`
   border-radius: 20px;
   background: #F8F8F8;
   display: flex;
-  flex-direction: row;
-  gap: 8rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    gap: 1rem;
-  }
+  justify-content: space-between; // 레이아웃 수정
 `;
 
 const Menu = styled.div`
-  width: 410px;
+  flex-grow: 1;  // 레이아웃 수정
+  max-width: 410px;  // 레이아웃 수정
   height: 88px;
   flex-shrink: 0;
   border-radius: 20px;

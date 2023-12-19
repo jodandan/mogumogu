@@ -30,7 +30,7 @@ export default function Unregister() {
   
     try {
       const userId = localStorage.getItem('userId');
-      const response = await axios.delete(`http://dana-seo.shop/api/user/delete?userId=${userId}`, {
+      const response = await axios.delete(`http://dana-seo.shop:8080/api/user/delete?userId=${userId}`, {
       
       });
   

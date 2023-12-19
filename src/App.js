@@ -16,7 +16,6 @@ import Note from './pages/Note/Note';
 import Mypage from './pages/Mypage/Mypage';
 
 import NoteDetailPage from "./components/NotePagination/NoteDetailPage";
-import notesData from "./components/NotePagination/data";
 
 import AdminLogin from './pages/AdminLogin/AdminLogin';
 import AdminPost from './pages/Admin/AdminPost/AdminPost';

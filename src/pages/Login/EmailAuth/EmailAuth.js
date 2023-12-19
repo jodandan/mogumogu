@@ -25,7 +25,7 @@ export default function EmailAuth() {
     const email = localStorage.getItem('userEmail'); 
    
     
-    axios.get('http://dana-seo.shop/api/join/emails/verifications', {
+    axios.get('http://dana-seo.shop:8080/api/join/emails/verifications', {
       params: {
         email: email,
         code: code
@@ -38,7 +38,9 @@ export default function EmailAuth() {
       
       // 추출한 userId를 로컬 스토리지에 저장
       localStorage.setItem('userId', userId);
-      navigate('/mainpage');
+      alert("회원가입이 완료되었습니다. 로그인을 통해 서비스 이용 가능합니다.");
+      navigate('/');
+      
     })
     .catch(error => {
       console.error(error);

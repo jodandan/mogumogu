@@ -38,7 +38,7 @@ export default function Mypage() {
       
     useEffect(() => {
         const userIdFromLocalStorage = localStorage.getItem('userId');
-
+       
         if (!userIdFromLocalStorage) {
             console.error('UserId not found in local storage');
             return;
@@ -46,7 +46,7 @@ export default function Mypage() {
 
         const fetchUserArticles = async () => {
             try {
-                const response = await axios.get(`http://dana-seo.shop/api/user/getUserArticles?userId=${userIdFromLocalStorage}`);
+                const response = await axios.get(`http://dana-seo.shop:8080/api/user/getUserArticles?userId=${userIdFromLocalStorage}`);
                 setUserArticles(response.data);
                 console.log(response.data);
             } catch (error) {
@@ -67,9 +67,11 @@ export default function Mypage() {
 
         const fetchUsernickName = async () => {
             try {
-                const response = await axios.get(`http://dana-seo.shop/api/user/get?userId=${userIdFromLocalStorage}`);
-                setNickname(response.data.nickName);  // Access nickName property from the response.data
-                setUsername(response.data.username);  // Access username property from the response.data
+                const response = await axios.get(`http://dana-seo.shop:8080/api/user/get?userId=${userIdFromLocalStorage}`);
+                setNickname(response.data.nickName);  
+                setUsername(response.data.username);  
+                localStorage.setItem('nickName', response.data.nickName); //닉네임 로컬 스토리지 저장
+                
             } catch (error) {
                 console.error('Error fetching user info:', error);
             }

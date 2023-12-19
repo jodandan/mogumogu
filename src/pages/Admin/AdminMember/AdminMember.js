@@ -21,7 +21,7 @@ export default function AdminMember() {
       }
 
       try {
-        const response = await axios.get('http://dana-seo.shop/api/user/admin/getAll', {
+        const response = await axios.get('http://dana-seo.shop:8080/api/user/admin/getAll', {
           headers: {
             Authorization: `Bearer ${adminToken}`,
           },
@@ -55,13 +55,12 @@ export default function AdminMember() {
     }
 
     try {
-      await axios.delete(`http://dana-seo.shop/api/user/delete?userId=${userId}`, {
+      await axios.delete(`http://dana-seo.shop:8080/api/user/delete?userId=${userId}`, {
         headers: {
           Authorization: `Bearer ${adminToken}`,
         },
       });
 
-      // Update memberData after successful deletion
       setMemberData((prevData) => prevData.filter((user) => user.id !== userId));
 
       alert("회원 삭제가 완료되었습니다.")
