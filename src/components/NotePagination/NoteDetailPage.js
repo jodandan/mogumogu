@@ -49,11 +49,8 @@ const NoteDetailPage = ({ post }) => {
             axios.patch(`http://dana-seo.shop:8080/api/article/deposit?articleId=${noteId}`)
                 .then(() => {
                     alert("입금이 완료되었습니다.");
-
-                    return axios.get(`http://dana-seo.shop:8080/api/message/getArticleMessages?articleId=${noteId}`);
-                })
-                .then((response) => {
-                    setDetail(response.data);
+                    // 페이지 새로 고침으로 데이터 재 생성
+                    window.location.reload();
                 })
                 .catch((error) => {
                     console.error('Error updating article status:', error);
@@ -66,8 +63,8 @@ const NoteDetailPage = ({ post }) => {
                     alert("확인되었습니다.");
 
 
-                    const updatedResponse = await axios.get(`http://dana-seo.shop:8080/api/message/getArticleMessages?articleId=${noteId}`);
-                    setDetail(updatedResponse.data);
+                    // 페이지 새로 고침으로 데이터 재 생성
+                        window.location.reload();
 
                     // 팝업 닫기
                     setPopupVisibility(false);
@@ -198,8 +195,15 @@ const NoteDetailPage = ({ post }) => {
                         ))}
                         <ListItem button={false} style={{ borderBottom: 'none' }}>
                             <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                {/* 거래 진행 현황 */}
                                 <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황:
-                                    {detail.length > 0 ? (detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감') : ''}</Typography>} />
+                                {detail.transactionStatus === 'RECRUITOPEN' && '모집중'}
+                                {detail.transactionStatus === 'RECRUITCLOSED' && '모집마감'}
+                                {detail.transactionStatus === 'APPROVED' && '거래 승인'}
+                                {detail.transactionStatus === 'COMPLETED' && '거래 완료'}
+                                {detail.transactionStatus === 'FINAL' && '거래최종완료'}
+
+                                {detail.length > 0 ? (detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감') : ''}</Typography>} />
                             </ListItemButton>
                         </ListItem>
                     </List>
