@@ -131,7 +131,7 @@ export default function AdminTransaction() {
                     </PostSituation>
                     <div style={{ marginLeft: '8rem' }}>
                         <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
-                        <Button onClick={() => handleCompletion(post.id)}>거래 완료</Button>
+                        <Button onClick={() => handleCompletion(post.id)}>최종 완료</Button>
                     </div>
                 </BoardItem>
             ))}
