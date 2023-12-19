@@ -62,11 +62,7 @@ export default function AdminTransaction() {
     const handleCompletion = async (articleId) => {
         try {
 
-            // Check if approval is granted for this post
-            if (!approvalStatus[articleId]) {
-                alert('거래 승인을 먼저 진행해주세요.');
-                return;
-            }
+           
             // 최종 거래 완료 요청
             const response = await axios.patch(`http://dana-seo.shop:8080/api/article/admin/final?articleId=${articleId}`);
 
