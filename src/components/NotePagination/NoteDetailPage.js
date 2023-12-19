@@ -38,7 +38,7 @@ const getTransactionStatusText = (status) => {
       default:
         return '';
     }
-  };
+  };//merge
   
 
 const NoteDetailPage = ({ post }) => {
