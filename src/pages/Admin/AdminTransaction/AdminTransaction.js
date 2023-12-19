@@ -42,7 +42,6 @@ export default function AdminTransaction() {
                 return newPosts;
             });
 
-            // Set approval status for the post
             setApprovalStatus((prevStatus) => ({
                 ...prevStatus,
                 [articleId]: true,
@@ -69,7 +68,6 @@ export default function AdminTransaction() {
             const updatedPost = response.data;
             alert('관리자가 최종 거래를 승인하였습니다');
             // alert 이후에 상태 업데이트
-            // Set approval status to false after completion
             setApprovalStatus((prevStatus) => ({
                 ...prevStatus,
                 [articleId]: false,
@@ -125,7 +123,7 @@ export default function AdminTransaction() {
                         {post.transactionStatus === 'COMPLETED' && '거래 완료'}
                         {post.transactionStatus === 'FINAL' && '거래최종완료'}
                     </PostSituation>
-                    <div style={{ marginLeft: '8rem' }}>
+                    <div style={{ marginLeft: '8vw' }}>
                         <Button onClick={() => handleApproval(post.id)}>거래 승인</Button>
                         <Button onClick={() => handleCompletion(post.id)}>최종 완료</Button>
                     </div>
@@ -177,7 +175,7 @@ const BoardItem = styled.div`
 const BoardTitle = styled.div`
     color: #000;
     font-family: Noto Sans;
-    font-size: 24px;
+    font-size: 1.5vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -187,13 +185,13 @@ const BoardTitle = styled.div`
 
 
 const Situation = styled(BoardTitle)`
-    margin-left: 7rem;
+    margin-left: 9vw;
     width: 10%; 
 `;
 
 
 const Title = styled(BoardTitle)`
-    margin-left: 25rem;
+    margin-left: 25vw;
     width: 20%; 
 `;
 
@@ -201,24 +199,24 @@ const Title = styled(BoardTitle)`
 const Number = styled.div`
     color: #000;
     font-family: Noto Sans;
-    font-size: 20px;
+    font-size: 1.5vw;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
-    letter-spacing: 4.8px;
+    letter-spacing: 0.3vw;
     width: 5%; 
 `;
 
 
 const PostTitle = styled(Number)`
-     margin-left: 15rem;
+     margin-left: 15vw;
     width: 30%; 
 `;
 
 
 const PostSituation = styled(Number)`
-    margin-left: 6rem;
-    width: 11%; 
+    margin-left: 6vw;
+    width: 20%; 
 `;
 //==============================================================
 
@@ -230,14 +228,14 @@ const PaginationContainer = styled.div`
 `;
 
 const Button = styled.button`
-    width: 107px;
-    height: 30px;
+    width: 7vw;
+    height: 2vw;
     flex-shrink: 0;
-    border-radius: 20px;
+    border-radius: 2vw;
     background: #FFF;
     color: #000;
     font-family: Noto Sans;
-    font-size: 14px;
+    font-size: 1.0vw;
     font-style: normal;
     font-weight: bold;
     line-height: normal;
