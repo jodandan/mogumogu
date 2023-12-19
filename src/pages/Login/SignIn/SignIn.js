@@ -33,7 +33,7 @@ export default function SignIn() {
 
     // API 요청
     try {
-      const response = await axios.post('http://dana-seo.shop/api/user/login', {
+      const response = await axios.post('http://dana-seo.shop:8080/api/user/login', {
         username: username,
         password: password
         

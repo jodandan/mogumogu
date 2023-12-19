@@ -34,7 +34,7 @@ export default function CreatePost() {
     };
 
     try {
-      const response = await axios.post('http://dana-seo.shop/api/article/create', data, {
+      const response = await axios.post('http://dana-seo.shop:8080/api/article/create', data, {
         params: {
           userId: userId,
         },

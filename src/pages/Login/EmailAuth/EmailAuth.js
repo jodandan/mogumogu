@@ -25,7 +25,7 @@ export default function EmailAuth() {
     const email = localStorage.getItem('userEmail'); 
    
     
-    axios.get('http://dana-seo.shop/api/join/emails/verifications', {
+    axios.get('http://dana-seo.shop:8080/api/join/emails/verifications', {
       params: {
         email: email,
         code: code

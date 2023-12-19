@@ -31,7 +31,7 @@ export default function AdminTransaction() {
         try {
 
 
-            const response = await axios.patch(`http://dana-seo.shop/api/article/admin/approve?articleId=${articleId}`);
+            const response = await axios.patch(`http://dana-seo.shop:8080/api/article/admin/approve?articleId=${articleId}`);
             const updatedPost = response.data;
 
             setPosts(prevPosts => {
@@ -50,7 +50,7 @@ export default function AdminTransaction() {
 
             alert('관리자가 거래를 승인하였습니다');
 
-            const updatedResponse = await axios.get('http://dana-seo.shop/api/article/getAll');
+            const updatedResponse = await axios.get('http://dana-seo.shop:8080/api/article/getAll');
             setPosts(updatedResponse.data);
         } catch (error) {
             console.error('Error approving transaction:', error);
@@ -68,7 +68,7 @@ export default function AdminTransaction() {
                 return;
             }
             // 최종 거래 완료 요청
-            const response = await axios.patch(`http://dana-seo.shop/api/article/admin/final?articleId=${articleId}`);
+            const response = await axios.patch(`http://dana-seo.shop:8080/api/article/admin/final?articleId=${articleId}`);
 
             const updatedPost = response.data;
             alert('관리자가 최종 거래를 승인하였습니다');
@@ -87,7 +87,7 @@ export default function AdminTransaction() {
                     return newPosts;
                 });
             }, 0);
-            const updatedResponse = await axios.get('http://dana-seo.shop/api/article/getAll');
+            const updatedResponse = await axios.get('http://dana-seo.shop:8080/api/article/getAll');
             setPosts(updatedResponse.data);
 
         } catch (error) {
@@ -98,7 +98,7 @@ export default function AdminTransaction() {
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+                const response = await axios.get('http://dana-seo.shop:8080/api/article/getAll');
                 setPosts(response.data);
                 console.log(response.data);
             } catch (error) {

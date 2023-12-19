@@ -30,7 +30,7 @@ export default function AdminLogin() {
     event.preventDefault();
     
     try {
-      const response = await axios.post('http://dana-seo.shop/api/user/login', {
+      const response = await axios.post('http://dana-seo.shop:8080/api/user/login', {
         username: id,
         password: password,
       });

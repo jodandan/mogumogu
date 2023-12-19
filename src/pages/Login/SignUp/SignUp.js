@@ -47,7 +47,7 @@ export default function SignUp() {
 
     console.log(data);
   
-    axios.post('http://dana-seo.shop/api/join/process', data)
+    axios.post('http://dana-seo.shop:8080/api/join/process', data)
       .then(response => {
         console.log(response.data);
         navigate('/emailauth'); // API 요청 성공시 라우팅

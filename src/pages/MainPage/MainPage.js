@@ -68,7 +68,7 @@ export default function MainPage() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        const response = await axios.get('http://dana-seo.shop:8080/api/article/getAll');
         setPosts(response.data);
       } catch (error) {
         console.error(error);
@@ -86,9 +86,9 @@ export default function MainPage() {
         let response;
         // 검색어가 있는 경우와 없는 경우를 분리하여 처리
         if (searchTerm) {
-          response = await axios.get(`http://dana-seo.shop/api/article/search?keyword=${searchTerm}`);
+          response = await axios.get(`http://dana-seo.shop:8080/api/article/search?keyword=${searchTerm}`);
         } else {
-          response = await axios.get('http://dana-seo.shop/api/article/getAll');
+          response = await axios.get('http://dana-seo.shop:8080/api/article/getAll');
         }
         setPosts(response.data);
       } catch (error) {

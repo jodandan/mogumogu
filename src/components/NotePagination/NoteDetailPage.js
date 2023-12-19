@@ -46,11 +46,11 @@ const NoteDetailPage = ({ post }) => {
         console.log(`Selected option: ${option}`);
 
         if (option === '입금 신청') {
-            axios.patch(`http://dana-seo.shop/api/article/deposit?articleId=${noteId}`)
+            axios.patch(`http://dana-seo.shop:8080/api/article/deposit?articleId=${noteId}`)
                 .then(() => {
                     alert("입금이 완료되었습니다.");
 
-                    return axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                    return axios.get(`http://dana-seo.shop:8080/api/message/getArticleMessages?articleId=${noteId}`);
                 })
                 .then((response) => {
                     setDetail(response.data);
@@ -62,11 +62,11 @@ const NoteDetailPage = ({ post }) => {
         else if (option === '거래 완료') {
             try {
                 if (status && status.length > 0 && status[0].transactionStatus === 'RECRUITCLOSED' || 'COMPLETED' || 'FINAL') {
-                    await axios.patch(`http://dana-seo.shop/api/article/transactionComplete?articleId=${noteId}`);
+                    await axios.patch(`http://dana-seo.shop:8080/api/article/transactionComplete?articleId=${noteId}`);
                     alert("확인되었습니다.");
 
 
-                    const updatedResponse = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}`);
+                    const updatedResponse = await axios.get(`http://dana-seo.shop:8080/api/message/getArticleMessages?articleId=${noteId}`);
                     setDetail(updatedResponse.data);
 
                     // 팝업 닫기
@@ -94,7 +94,7 @@ const NoteDetailPage = ({ post }) => {
             const userId = localStorage.getItem('userId');
             console.log(userId)
             try {
-                const response = await axios.get(`http://dana-seo.shop/api/message/getArticleMessages?articleId=${noteId}&userId=${userId}`);
+                const response = await axios.get(`http://dana-seo.shop:8080/api/message/getArticleMessages?articleId=${noteId}&userId=${userId}`);
                 console.log(response.data);
                 setDetail(response.data);
 
@@ -147,7 +147,7 @@ const NoteDetailPage = ({ post }) => {
 
         console.log("receiver", receiver);
         try {
-            await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
+            await axios.post(`http://dana-seo.shop:8080/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
             setPopupVisibility(false);
             alert('쪽지가 전송되었습니다.');
 

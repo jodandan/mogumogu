@@ -43,7 +43,7 @@ const Paging = () => {
 
     const fetchUserArticles = async () => {
       try {
-        const response = await axios.get(`http://dana-seo.shop/api/message/getMessageStorage?userId=${userIdFromLocalStorage}`);
+        const response = await axios.get(`http://dana-seo.shop:8080/api/message/getMessageStorage?userId=${userIdFromLocalStorage}`);
         setNote(response.data);
         console.log(response.data);
       } catch (error) {

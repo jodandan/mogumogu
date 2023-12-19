@@ -29,7 +29,7 @@ export default function InputComment() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://dana-seo.shop/api/article/getAll',
+        const response = await axios.get('http://dana-seo.shop:8080/api/article/getAll',
           {
             params: {
               articleId: postId,
@@ -62,7 +62,7 @@ export default function InputComment() {
     };
 
     try {
-      await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
+      await axios.post(`http://dana-seo.shop:8080/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
       setPopupVisibility(false);
       alert('쪽지가 전송되었습니다.');
     } catch (error) {

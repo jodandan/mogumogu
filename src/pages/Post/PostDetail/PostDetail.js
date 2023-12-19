@@ -93,7 +93,7 @@ export default function PostDetail() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://dana-seo.shop/api/article/get',
+        const response = await axios.get('http://dana-seo.shop:8080/api/article/get',
           {
             params: {
               articleId: postId,
@@ -114,7 +114,7 @@ export default function PostDetail() {
   const deleteArticle = async () => {
     try {
 
-      await axios.delete('http://dana-seo.shop/api/article/delete', {
+      await axios.delete('http://dana-seo.shop:8080/api/article/delete', {
         params: {
           articleId: postId
         }
@@ -143,7 +143,7 @@ export default function PostDetail() {
     };
   
     try {
-      await axios.post(`http://dana-seo.shop/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
+      await axios.post(`http://dana-seo.shop:8080/api/message/create?userId=${userIdFromLocalStorage}`, messageData);
       setPopupVisible(false);
       alert('쪽지가 전송되었습니다.');
     } catch (error) {
@@ -155,7 +155,7 @@ export default function PostDetail() {
   const createArticleComplain = async () => {
     try {
       const response = await axios.patch(
-        'http://dana-seo.shop/api/article/addComplain',
+        'http://dana-seo.shop:8080/api/article/addComplain',
         null,
         {
           params: {

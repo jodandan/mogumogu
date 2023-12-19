@@ -25,7 +25,7 @@ export default function AdminPost() {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://dana-seo.shop/api/article/delete?articleId=${postId}`);
+      await axios.delete(`http://dana-seo.shop:8080/api/article/delete?articleId=${postId}`);
 
       setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
 
@@ -39,7 +39,7 @@ export default function AdminPost() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://dana-seo.shop/api/article/getAll');
+        const response = await axios.get('http://dana-seo.shop:8080/api/article/getAll');
         setPosts(response.data);
         console.log(response.data);
       } catch (error) {
