@@ -62,8 +62,10 @@ export default function AdminTransaction() {
     const handleCompletion = async (articleId) => {
         try {
 
+            const post = posts.find((post) => post.id === articleId);
+
             // Check if approval is granted for this post
-            if (!approvalStatus[articleId]) {
+            if (post.transactionStatus !== 'APPROVED') {
                 alert('거래 승인을 먼저 진행해주세요.');
                 return;
             }
