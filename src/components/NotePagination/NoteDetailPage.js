@@ -106,22 +106,6 @@ const NoteDetailPage = ({ post }) => {
         fetchPosts();
     }, [noteId]);
 
-    //게시글 전체 조회 API
-    useEffect(() => {
-        const fetchArticle = async () => {
-            try {
-                const response2 = await axios.get(`http://dana-seo.shop/api/article/getAll`);
-                setStatus(response2.data);
-                console.log(response2.data);
-
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchArticle();
-    }, []);
-
 
     const handleSendMessageClick = async () => {
         const userIdFromLocalStorage = localStorage.getItem('userId');
@@ -131,28 +115,28 @@ const NoteDetailPage = ({ post }) => {
             return;
         }
 
-                    // 로컬 스토리지에서 닉네임 가져오기
-            const nicknameFromLocalStorage = localStorage.getItem('nickname');
+        // 로컬 스토리지에서 닉네임 가져오기
+        const nicknameFromLocalStorage = localStorage.getItem('nickname');
 
-            // receiver 변수 초기화
-            let receiver = '';
+        // receiver 변수 초기화
+        let receiver = '';
 
-            // detail 배열의 길이가 0보다 큰 경우에만 처리
-            if (detail.length > 0) {
+        // detail 배열의 길이가 0보다 큰 경우에만 처리
+        if (detail.length > 0) {
             // detail 배열의 첫 번째 요소부터 비교 시작
             let index = 0;
             while (index < detail.length) {
                 // detail 배열의 sender와 로컬 스토리지의 닉네임 비교
                 if (detail[index].receiver === nicknameFromLocalStorage) {
-                // sender가 같은 경우, 다음 요소로 이동하여 다시 비교
-                index++;
+                    // sender가 같은 경우, 다음 요소로 이동하여 다시 비교
+                    index++;
                 } else {
-                // sender가 다른 경우, 해당 sender를 receiver로 정의하고 반복문 종료
-                receiver = detail[index].receiver;
-                break;
+                    // sender가 다른 경우, 해당 sender를 receiver로 정의하고 반복문 종료
+                    receiver = detail[index].receiver;
+                    break;
                 }
             }
-            }
+        }
 
 
         const messageData = {
@@ -167,8 +151,8 @@ const NoteDetailPage = ({ post }) => {
             setPopupVisibility(false);
             alert('쪽지가 전송되었습니다.');
 
-        // 페이지 새로 고침으로 데이터 재 생성
-        window.location.reload();
+            // 페이지 새로 고침으로 데이터 재 생성
+            window.location.reload();
 
 
         } catch (error) {
@@ -215,7 +199,7 @@ const NoteDetailPage = ({ post }) => {
                         <ListItem button={false} style={{ borderBottom: 'none' }}>
                             <ListItemButton disableRipple style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                 <ListItemText primary={<Typography style={{ textAlign: 'center', fontSize: '2rem' }}>진행 현황:
-                                    {status.transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감'}</Typography>} />
+                                    {detail.length > 0 ? (detail[0].transactionStatus === 'RECRUITOPEN' ? '모집중' : '모집마감') : ''}</Typography>} />
                             </ListItemButton>
                         </ListItem>
                     </List>
