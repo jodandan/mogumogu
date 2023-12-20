@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Pagination.css';
 import Pagination from 'react-js-pagination';
@@ -11,8 +10,6 @@ import Pagination from 'react-js-pagination';
 
 const Paging = () => {
   const navigate = useNavigate();
-
-  const [page, setPage] = useState(1);
 
   const [note, setNote] = useState([]);
 

@@ -32,8 +32,7 @@ export default function Mypage() {
     };
 
     const handlePostClick = (postId) => {
-        // Redirect to the post page using the post id or any other identifier
-        navigate(`/postdetail/${postId}`); // Replace 'post' and 'id' with your actual route and identifier
+        navigate(`/postdetail/${postId}`);
       };
       
     useEffect(() => {

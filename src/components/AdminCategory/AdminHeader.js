@@ -8,7 +8,7 @@ import Button  from '@mui/material/Button';
 import Grid from '@mui/system/Unstable_Grid/Grid';
 import modang from "../../assets/modang.png"
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 
@@ -18,7 +18,6 @@ export default function AdminHeader() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('access_token') !== null);
   const user = useSelector((state) => state.user);
-  const [logoutSuccess, setLogoutSuccess] = useState(false);
 
   useEffect(() => {
     const checkLoginStatus = () => {
