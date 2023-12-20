@@ -67,8 +67,6 @@ export default function AdminLogin() {
               marginTop: '5'
             }}
           >
-
-            {/* <img src={modangBack} width="60px" alt='' /> */}
             <Typography component="h1" variant="h4" style={{ fontWeight: 'bold' }}>
               Admin
             </Typography>
@@ -127,6 +125,3 @@ export default function AdminLogin() {
     </>
   )
 }
-
-
-//test

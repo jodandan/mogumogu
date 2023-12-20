@@ -6,7 +6,7 @@ import Pagination from 'react-js-pagination';
 
 
 const PostList = ({ posts }) => {
-    const itemsPerPage = 5; // Number of items to display per page
+    const itemsPerPage = 5;
     const [currentPage, setCurrentPage] = useState(1);
 
     const indexOfLastPost = currentPage * itemsPerPage;

@@ -139,7 +139,7 @@ export default function PostDetail() {
     const messageData = {
       articleId: postId,
       content: messageContent,
-      receiver: detail.nickName, // Assuming nickName is the receiver's username
+      receiver: detail.nickName,
     };
   
     try {
