@@ -8,7 +8,7 @@ import Button  from '@mui/material/Button';
 import Grid from '@mui/system/Unstable_Grid/Grid';
 import modang from "../../assets/modang.png"
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 
 

@@ -222,46 +222,7 @@ const NoteDetailPage = ({ post }) => {
 
                 <Grid container style={{ maxWidth: '100%', padding: "0 3rem" }}>
                     <PostBody>
-                        {/* <ul>
-  {detail.length > 0 && detail.map((post) => (
-    <Comment key={post.id}>
-      
-      <div style={{ width: '100%', borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-        <div>
-          <p style={{
-            color: post.userId === localStorage.getItem('userId') ? '#EDB96A' : '#338379',
-            fontSize: '27px',
-            fontStyle: 'normal',
-            fontWeight: '700',
-            lineHeight: 'normal',
-          }}>{post.sender}</p>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <p>{post.content}</p>
-        </div>
-      </div>
-
-    
-{post.messages && post.messages.map((message) => {
-  
-
-  return (
-    <div key={message.id} style={{ borderBottom: '1px solid #999797', padding: '20px 0px 20px 0px' }}>
-      <p style={{
-        color: localStorage.getItem('userId') === message.senderId ? '#EDB96A' : '#338379',
-        fontSize: '27px',
-        fontStyle: 'normal',
-        fontWeight: '700',
-        lineHeight: 'normal',
-      }}>{message.sender}</p>
-      <p>{message.content}</p>
-    </div>
-  );
-})}
-
-    </Comment>
-  ))}
-</ul> */}
+                    
                         <ul>
                             {detail.length > 0 && detail.map((post) => {
                                 const userIdFromLocalStorage = localStorage.getItem('userId');
