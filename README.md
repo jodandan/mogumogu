@@ -1,4 +1,4 @@
-![image](https://github.com/jodandan/mogumogu/assets/113495894/e90145de-050a-4660-90f3-6c6503d9dc04)
+
 
 # 프로젝트 소개 
 
